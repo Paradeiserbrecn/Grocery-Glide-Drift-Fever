@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 public class CartMovement : MonoBehaviour
 {
-	private bool _ragdoll = false, _isDrifting = false, _boostReady = false, _propUp = false;
+	private bool _ragdoll = false, _propUp = false;
 	private Vector3 _lastRot, _vel = Vector3.zero;
 	private Rigidbody _cart;
 	[SerializeField] private float thrust = 100;
@@ -17,6 +17,10 @@ public class CartMovement : MonoBehaviour
 	[SerializeField] private PhysicMaterial slipperyMaterial;
 	[SerializeField] private PhysicMaterial ragdollMaterial;
 	private BoxCollider _boxCollider;
+
+	public bool IsDrifting { get; private set; } = false;
+	public bool BoostReady { get; private set; } = false;
+
 
 
 	private void Start()
@@ -81,15 +85,15 @@ public class CartMovement : MonoBehaviour
 		}
 
 		_driftValue = DriftValue();
-		CheckDrifting();
+		SetIsDrifting();
 		CheckTipping();
 		AddDriftScore(_weightPenalty);
 
 		//Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
 
 		//interpolating values
-		_tippingThreshold = _tippingThreshold + (_fixedTippingThreshold - _tippingThreshold) * 0.005f;
-		_driftBoost = _driftBoost + (1 - _driftBoost) * 0.01f;
+		_tippingThreshold += (_fixedTippingThreshold - _tippingThreshold) * 0.005f;
+		_driftBoost += (1 - _driftBoost) * 0.01f;
 	}
 
 	private float DriftValue()
@@ -105,16 +109,9 @@ public class CartMovement : MonoBehaviour
 		}
 	}
 
-	private void CheckDrifting()
+	private void SetIsDrifting()
 	{
-		if (!_ragdoll && _driftValue > minDrift)
-		{
-			_isDrifting = true;
-		}
-		else
-		{
-			_isDrifting = false;
-		}
+		IsDrifting = !_ragdoll && _driftValue > minDrift;
 	}
 
 	private void ActivateNormal()
@@ -132,37 +129,27 @@ public class CartMovement : MonoBehaviour
 
 	private void AddDriftScore(float weightPenalty)
 	{
-		if (_isDrifting)
+		if (IsDrifting)
 		{
 			_driftScore += _driftValue * Time.deltaTime * 10 * weightPenalty;
 			if (_driftScore > _minBoost)
 			{
-				_boostReady = true;
+				BoostReady = true;
 			}
 		}
 		else
 		{
-			if (_boostReady)
+			if (BoostReady)
 			{
 				_driftBoost += Mathf.Min(_driftScore / 350, 1);
 				_tippingThreshold += Mathf.Min(_driftScore / 150, 8);
 			}
 
 			_driftScore = 0;
-			_boostReady = false;
+			BoostReady = false;
 		}
 	}
-
-	public bool GetIsDrifting()
-	{
-		return _isDrifting;
-	}
-
-	public bool GetBoostReady()
-	{
-		return _boostReady;
-	}
-
+	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
 		Debug.Log("Make Upright Called");

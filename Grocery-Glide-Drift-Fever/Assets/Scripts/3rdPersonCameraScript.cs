@@ -24,7 +24,4 @@ public class ThirdPersonCamera : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, _globalCameraPos, ref _vel, smooth);
         transform.LookAt(cart.position+cart.up*lookHeight);
     }
-
-
-
 }

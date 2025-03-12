@@ -7,8 +7,7 @@ public class WheelBehaviour : MonoBehaviour
 	[SerializeField] private Rigidbody rb;
 	[SerializeField] private ParticleSystem smoke, sparks;
 	private CartMovement _cartMovement;
-
-
+	
     private void Start()
     {
         _cartMovement = rb.GetComponent<CartMovement>();
@@ -17,7 +16,7 @@ public class WheelBehaviour : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (new Vector3(rb.velocity.x,0,rb.velocity.z).magnitude > 0)
 		{
@@ -25,7 +24,7 @@ public class WheelBehaviour : MonoBehaviour
 			transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 		}
 
-		if (_cartMovement.GetIsDrifting()) 
+		if (_cartMovement.IsDrifting) 
 		{
 			smoke.Play();
 		}
@@ -34,8 +33,8 @@ public class WheelBehaviour : MonoBehaviour
 			smoke.Stop();
 		}
 
-		Debug.Log(_cartMovement.GetBoostReady());
-		if (_cartMovement.GetBoostReady()) {
+		Debug.Log(_cartMovement.BoostReady);
+		if (_cartMovement.BoostReady) {
 			sparks.Play();
 		}
 		else
@@ -44,61 +43,3 @@ public class WheelBehaviour : MonoBehaviour
 		}
     }
 }
-
-/* 
-public partial class Wheel : MeshInstance3D
-{
-
-	private Cart cart;
-	private Vector3 velocityDir, velocity2D;
-	private GpuParticles3D smoke, sparks;
-
-	public float driftAngleThresh = 0.7f;
-	public float driftVelocityThresh = 7f;
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		cart = GetParent<Cart>();
-		smoke = GetChild<GpuParticles3D>(0);
-		sparks = GetChild<GpuParticles3D>(1);
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
-	{
-		velocity2D = new Vector3(cart.LinearVelocity.X, 0, cart.LinearVelocity.Z);
-		velocityDir = GlobalPosition + velocity2D;
-		LookInVelocityDirection();
-
-
-		if (cart.isDrifting)
-		{
-			smoke.Emitting = true;
-		}
-		else
-		{
-			smoke.Emitting = false;
-		}
-		if(cart.boostReady)
-		{
-			sparks.Emitting =true;
-		}
-		else
-		{
-			sparks.Emitting =false;
-		}
-
-	}
-
-	private void LookInVelocityDirection()
-	{
-		if (velocity2D.Length() > 0.1)
-		{
-			LookAt(velocityDir);
-			Rotation = new Vector3(0, Rotation.Y, 0);
-		}
-	}
-}
-*/
-
