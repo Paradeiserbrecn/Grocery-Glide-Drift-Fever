@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: My project
+  productName: Grocery Glide - Drift Fever
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -676,14 +676,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: My project
+  metroPackageName: Grocery Glide - Drift Fever
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: My project
+  metroApplicationDescription: Grocery Glide - Drift Fever
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -755,7 +755,7 @@ PlayerSettings:
   cloudProjectId: 2bc254d2-4e4c-47ce-884a-9bc5379a3dea
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: My project 2025-03-12_14-56-51
+  projectName: Grocery Glide - Drift Fever 2025-03-12_14-56-51
   organizationId: sirskoootsch
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
