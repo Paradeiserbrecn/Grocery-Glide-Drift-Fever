@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class wheel : MonoBehaviour
+public class WheelBehaviour : MonoBehaviour
 {
 	[SerializeField] private Rigidbody rb;
 	[SerializeField] private ParticleSystem smoke, sparks;
-	private Cart cart;
+	private CartMovement _cartMovement;
 
 
     private void Start()
     {
-        cart = rb.GetComponent<Cart>();
+        _cartMovement = rb.GetComponent<CartMovement>();
 		smoke.Stop();
 		sparks.Stop();
     }
@@ -25,7 +25,7 @@ public class wheel : MonoBehaviour
 			transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 		}
 
-		if (cart.GetIsDrifting()) 
+		if (_cartMovement.GetIsDrifting()) 
 		{
 			smoke.Play();
 		}
@@ -34,8 +34,8 @@ public class wheel : MonoBehaviour
 			smoke.Stop();
 		}
 
-		Debug.Log(cart.GetBoostReady());
-		if (cart.GetBoostReady()) {
+		Debug.Log(_cartMovement.GetBoostReady());
+		if (_cartMovement.GetBoostReady()) {
 			sparks.Play();
 		}
 		else
