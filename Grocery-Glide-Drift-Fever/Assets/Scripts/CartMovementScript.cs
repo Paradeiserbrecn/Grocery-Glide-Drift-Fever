@@ -1,10 +1,13 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 
 public class CartMovement : MonoBehaviour
 {
-	private bool _ragdoll = false, _propUp = false;
+	public bool _ragdoll = false;
+	private bool _propUp = false;
 	private Vector3 _lastRot, _vel = Vector3.zero;
 	private Rigidbody _cart;
 	[SerializeField] private float thrust = 100;
@@ -20,6 +23,8 @@ public class CartMovement : MonoBehaviour
 
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
+	[SerializeField] public Transform propupTargetPosition;
+	private float propup = 0;
 
 
 
@@ -41,15 +46,49 @@ public class CartMovement : MonoBehaviour
 	{
 		if (_ragdoll && Input.GetKeyDown("r"))
 		{
-			_cart.isKinematic = true;
+			_cart.useGravity = false;
 			_propUp = true;
 			Debug.Log("R");
 		}
-	}
 
-	private void FixedUpdate()
-	{
-		if (_ragdoll)
+		else{
+			_weightPenalty = (3 - (weight / weightMax)) / 3;
+			_verticalAxis = Input.GetAxisRaw("Vertical");
+			_horizontalAxis = Input.GetAxisRaw("Horizontal");
+			
+			_driftValue = DriftValue();
+			switch (_verticalAxis)
+			{
+				//thrust
+				case > 0:
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * _weightPenalty * 3f));
+					break;
+				//brake
+				case < 0:
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * _weightPenalty * 0.6f));
+					break;
+			}
+
+			if (_horizontalAxis != 0) //rotation
+			{
+				_cart.AddTorque(transform.up * (_horizontalAxis * angular * _weightPenalty * 1f));
+			}
+
+			_driftValue = DriftValue();
+			SetIsDrifting();
+			CheckTipping();
+			AddDriftScore(_weightPenalty);
+
+			//Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
+
+			//interpolating values
+			_tippingThreshold += (_fixedTippingThreshold - _tippingThreshold) * 0.005f;
+			_driftBoost += (1 - _driftBoost) * 0.01f;
+		}
+	}
+    private void FixedUpdate()
+    {
+        if (_ragdoll)
 		{
 			// {
 			// 	//TODO: detect being upright
@@ -60,43 +99,9 @@ public class CartMovement : MonoBehaviour
 				MakeUpright();
 			}
 		}
+    }
 
-
-		_weightPenalty = ((3 - (weight / weightMax)) / 3);
-		_verticalAxis = Input.GetAxisRaw("Vertical");
-		_horizontalAxis = Input.GetAxisRaw("Horizontal");
-		
-		_driftValue = DriftValue();
-		switch (_verticalAxis)
-		{
-			//thrust
-			case > 0:
-				_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * _weightPenalty * 3f));
-				break;
-			//brake
-			case < 0:
-				_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * _weightPenalty * 0.6f));
-				break;
-		}
-
-		if (_horizontalAxis != 0) //rotation
-		{
-			_cart.AddTorque(transform.up * (_horizontalAxis * angular * _weightPenalty * 1f));
-		}
-
-		_driftValue = DriftValue();
-		SetIsDrifting();
-		CheckTipping();
-		AddDriftScore(_weightPenalty);
-
-		//Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
-
-		//interpolating values
-		_tippingThreshold += (_fixedTippingThreshold - _tippingThreshold) * 0.005f;
-		_driftBoost += (1 - _driftBoost) * 0.01f;
-	}
-
-	private float DriftValue()
+    private float DriftValue()
 	{
 		return Mathf.Abs(Vector3.Dot(transform.right, _cart.velocity) * ((1 + (weight / weightMax)) / 2));
 	}
@@ -152,12 +157,7 @@ public class CartMovement : MonoBehaviour
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
-		Debug.Log("Make Upright Called");
-		transform.position = new Vector3(transform.position.x, Mathf.Min(transform.position.y + 0.02f, 2),
-			transform.position.z);
-		//transform.position = Vector3.SmoothDamp(transform.position, new Vector3(transform.position.x, 2, transform.position.z), ref vel, 0.5f);
-
-		//Position = Position + (new Godot.Vector3(Position.X, 2, Position.Z) - Position) * (float)(10 * delta);
-		//Rotation = Rotation + (lastOrientation - Rotation) * (float)(5 * delta);
+		Debug.Log("Make Upright Called " + Time.frameCount );
+		transform.position=Vector3.SmoothDamp(transform.position, propupTargetPosition.position, ref _vel, 1f);
 	}
 }

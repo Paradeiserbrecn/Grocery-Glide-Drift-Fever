@@ -21,7 +21,7 @@ public class WheelBehaviour : MonoBehaviour
         if (new Vector3(rb.velocity.x,0,rb.velocity.z).magnitude > 0)
 		{
 			transform.LookAt(transform.position+rb.velocity);
-			transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+			transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
 		}
 
 		if (_cartMovement.IsDrifting) 
@@ -33,7 +33,6 @@ public class WheelBehaviour : MonoBehaviour
 			smoke.Stop();
 		}
 
-		Debug.Log(_cartMovement.BoostReady);
 		if (_cartMovement.BoostReady) {
 			sparks.Play();
 		}
