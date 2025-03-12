@@ -7,154 +7,159 @@ using UnityEngine.UIElements;
 
 public class Cart : MonoBehaviour
 {
-    private bool ragdoll = false, isDrifting = false, boostReady = false, propUp = false;
-    private Vector3 lastRot, vel = Vector3.zero;
-    private Rigidbody cart;
+    private bool _ragdoll = false, _isDrifting = false, _boostReady = false, _propUp = false;
+    private Vector3 _lastRot, _vel = Vector3.zero;
+    private Rigidbody _cart;
     [SerializeField] private float thrust = 100, angular = 20, weightMax = 100, mindrift = 5, weight;
-    private float driftBoost = 1, tippingThreshold, fixedTippingThreshold, minBoost, driftV, driftScore;
+    private float _driftBoost = 1, _tippingThreshold, _fixedTippingThreshold, _minBoost, _driftV, _driftScore;
 
     [SerializeField] PhysicMaterial slipperyM, ragdollM;
+    private BoxCollider _boxCollider;
 
 
-    void Start()
+    private void Start()
     {
-        cart = GetComponent<Rigidbody>();
-        lastRot = transform.forward;
-        cart.maxAngularVelocity = 50;
-        fixedTippingThreshold = thrust/7;
-        tippingThreshold = fixedTippingThreshold;
-        minBoost = thrust * 2;
+        _boxCollider = GetComponent<BoxCollider>();
+        _cart = GetComponent<Rigidbody>();
+        _lastRot = transform.forward;
+        _cart.maxAngularVelocity = 50;
+        _fixedTippingThreshold = thrust/7;
+        _tippingThreshold = _fixedTippingThreshold;
+        _minBoost = thrust * 2;
+        CheckTipping();
+
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (!ragdoll)
+        if (!_ragdoll)
         {
-            lastRot = transform.forward;
+            _lastRot = transform.forward;
             float weightPenalty = ((3 - (weight / weightMax)) / 3);
             float vertical = Input.GetAxisRaw("Vertical");
             float horizontal = Input.GetAxisRaw("Horizontal");
 
 
             //Debug.Log(transform.up);
-            driftV = driftValue();
+            _driftV = DriftValue();
 
             if (vertical > 0)  //thrust
             {
-                cart.AddForce(transform.forward * vertical * thrust  * driftBoost * weightPenalty * 3f);
+                _cart.AddForce(transform.forward * (vertical * thrust * _driftBoost * weightPenalty * 3f));
             }
             if (vertical < 0)  //brake
             {
-                cart.AddForce(transform.forward * vertical * thrust  * driftBoost * weightPenalty * 0.6f);
+                _cart.AddForce(transform.forward * (vertical * thrust * _driftBoost * weightPenalty * 0.6f));
             }
             if (horizontal != 0)  //rotation
             {
-                cart.AddTorque(transform.up * horizontal * angular * weightPenalty * 1f);
+                _cart.AddTorque(transform.up * (horizontal * angular * weightPenalty * 1f));
             }
 
-            driftV = driftValue();
-            checkDrifting();
-            checkTipping();
-            addDriftScore(weightPenalty);
+            _driftV = DriftValue();
+            CheckDrifting();
+            CheckTipping();
+            AddDriftScore(weightPenalty);
 
             //Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
 
             //interpolating values
-            tippingThreshold = tippingThreshold + (fixedTippingThreshold - tippingThreshold) * 0.005f;
-            driftBoost = driftBoost + (1 - driftBoost) * 0.01f;
+            _tippingThreshold = _tippingThreshold + (_fixedTippingThreshold - _tippingThreshold) * 0.005f;
+            _driftBoost = _driftBoost + (1 - _driftBoost) * 0.01f;
         }
         else
         {
             if (Input.GetKeyDown("r"))
             {
-                cart.isKinematic = true;
-                propUp = true;
+                _cart.isKinematic = true;
+                _propUp = true;
                 Debug.Log("R");
             }
             //TODO: detect being upright
 
-            if (propUp)
+            if (_propUp)
             {
-                makeUpright();
+                MakeUpright();
             }
 
             
         }
         
     }
-    float driftValue()
+    private float DriftValue()
     {
-        return Mathf.Abs(Vector3.Dot(transform.right, cart.velocity) * ((1 + (weight / weightMax)) / 2));
+        return Mathf.Abs(Vector3.Dot(transform.right, _cart.velocity) * ((1 + (weight / weightMax)) / 2));
     }
 
-    void checkTipping()
+    private void CheckTipping()
     {
-        if (driftV > tippingThreshold)
+        if (_driftV > _tippingThreshold)
         {
-            activateRagdoll();
+            ActivateRagdoll();
         }
     }
 
-    void checkDrifting()
+    private void CheckDrifting()
     {
-        if (!ragdoll && driftV > mindrift)
+        if (!_ragdoll && _driftV > mindrift)
         {
-            isDrifting = true;
+            _isDrifting = true;
         }
         else
         {
-            isDrifting = false;
+            _isDrifting = false;
         }
     }
 
-    void activateNormal()
+    private void ActivateNormal()
     {
-        ragdoll = false;
-        cart.isKinematic = false;
-        GetComponent<BoxCollider>().material = slipperyM;
+        _ragdoll = false;
+        _cart.isKinematic = false;
+        _boxCollider.material = slipperyM;
     }
 
-    void activateRagdoll()
+    private void ActivateRagdoll()
     {
-        ragdoll = true;
-        GetComponent<BoxCollider>().material = ragdollM;
+        _ragdoll = true;
+        _boxCollider.material = ragdollM;
     }
 
-    void addDriftScore(float weightPenalty)
+    private void AddDriftScore(float weightPenalty)
     {
-        if (isDrifting)
+        if (_isDrifting)
         {
-            driftScore += driftV * Time.deltaTime * 10 * weightPenalty;
-            if (driftScore > minBoost)
+            _driftScore += _driftV * Time.deltaTime * 10 * weightPenalty;
+            if (_driftScore > _minBoost)
             {
-                boostReady = true;
+                _boostReady = true;
             }
         }
         else
         {
-            if (boostReady)
+            if (_boostReady)
             {
-                driftBoost += Mathf.Min(driftScore / 350, 1);
-                tippingThreshold += Mathf.Min(driftScore / 150, 8);
+                _driftBoost += Mathf.Min(_driftScore / 350, 1);
+                _tippingThreshold += Mathf.Min(_driftScore / 150, 8);
             }
-            driftScore = 0;
-            boostReady = false;
+            _driftScore = 0;
+            _boostReady = false;
         }
 
     }
 
-    public bool getIsDrifting()
+    public bool GetIsDrifting()
     {
-        return isDrifting;
+        return _isDrifting;
     }
 
-    public bool getBoostReady()
+    public bool GetBoostReady()
     {
-        return boostReady;
+        return _boostReady;
     }
 
-    private void makeUpright() //raises the cart and changes its rotation to the last rotation before crashing
+    // ReSharper disable Unity.PerformanceAnalysis
+    private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
     {
         Debug.Log("doing stuff");
         transform.position = new Vector3(transform.position.x, Mathf.Min(transform.position.y + 0.02f, 2), transform.position.z);

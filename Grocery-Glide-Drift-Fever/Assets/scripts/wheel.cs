@@ -25,7 +25,7 @@ public class wheel : MonoBehaviour
 			transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 		}
 
-		if (cart.getIsDrifting()) 
+		if (cart.GetIsDrifting()) 
 		{
 			smoke.Play();
 		}
@@ -34,8 +34,8 @@ public class wheel : MonoBehaviour
 			smoke.Stop();
 		}
 
-		Debug.Log(cart.getBoostReady());
-		if (cart.getBoostReady()) {
+		Debug.Log(cart.GetBoostReady());
+		if (cart.GetBoostReady()) {
 			sparks.Play();
 		}
 		else
