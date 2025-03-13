@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(Transform))]
 public class CartMovement : MonoBehaviour
 {
 	public bool _ragdoll = false;
@@ -15,6 +16,7 @@ public class CartMovement : MonoBehaviour
 	[SerializeField] private float weightMax = 100;
 	[SerializeField] private float minDrift = 5;
 	[SerializeField] private float weight;
+	[SerializeField] private WheelBehaviour[] wheels;
 	private float _driftBoost = 1, _tippingThreshold, _fixedTippingThreshold, _minBoost, _driftValue, _driftScore;
 
 	[SerializeField] private PhysicMaterial slipperyMaterial;
@@ -23,8 +25,7 @@ public class CartMovement : MonoBehaviour
 
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
-	[SerializeField] public Transform propupTargetPosition;
-	private float propup = 0;
+	[SerializeField] public Transform propUpTargetPosition;
 
 
 
@@ -75,7 +76,7 @@ public class CartMovement : MonoBehaviour
 			}
 
 			_driftValue = DriftValue();
-			SetIsDrifting();
+			IsDrifting = CheckIsDrifting();
 			CheckTipping();
 			AddDriftScore(_weightPenalty);
 
@@ -114,9 +115,23 @@ public class CartMovement : MonoBehaviour
 		}
 	}
 
-	private void SetIsDrifting()
+	private bool CheckIsDrifting()
 	{
-		IsDrifting = !_ragdoll && _driftValue > minDrift;
+		if (!_ragdoll && _driftValue > minDrift)
+		{
+			foreach (WheelBehaviour wheel in wheels)
+			{
+				wheel.PlaySmoke();
+			}
+
+			return true;
+		}
+		
+		foreach (WheelBehaviour wheel in wheels)
+		{
+			wheel.StopSmoke();
+		}
+		return false;
 	}
 
 	private void ActivateNormal()
@@ -157,7 +172,6 @@ public class CartMovement : MonoBehaviour
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
-		Debug.Log("Make Upright Called " + Time.frameCount );
-		transform.position=Vector3.SmoothDamp(transform.position, propupTargetPosition.position, ref _vel, 1f);
+		transform.position=Vector3.SmoothDamp(transform.position, propUpTargetPosition.position, ref _vel, 1f);
 	}
 }
