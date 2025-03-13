@@ -24,7 +24,6 @@ public class CartMovement : MonoBehaviour
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
 	[SerializeField] public Transform propupTargetPosition;
-	private float propup = 0;
 
 
 
@@ -51,7 +50,9 @@ public class CartMovement : MonoBehaviour
 			Debug.Log("R");
 		}
 
-		else{
+		else
+		{
+			_lastRot = transform.forward;
 			_weightPenalty = (3 - (weight / weightMax)) / 3;
 			_verticalAxis = Input.GetAxisRaw("Vertical");
 			_horizontalAxis = Input.GetAxisRaw("Horizontal");
@@ -157,7 +158,8 @@ public class CartMovement : MonoBehaviour
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
-		Debug.Log("Make Upright Called " + Time.frameCount );
 		transform.position=Vector3.SmoothDamp(transform.position, propupTargetPosition.position, ref _vel, 1f);
+		transform.forward = Vector3.RotateTowards(transform.forward, _lastRot, 1f * Time.deltaTime, 0f);
+		
 	}
 }
