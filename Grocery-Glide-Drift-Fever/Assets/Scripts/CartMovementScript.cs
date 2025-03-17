@@ -181,11 +181,13 @@ public class CartMovement : MonoBehaviour
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
-		// if (transform.rotation.Compare(_lastRot, 0) && transform.position.Compare(propUpTargetPosition, 0))
-		// {
-		// 	Debug.Log("Done Making upright");
-		// 	return;
-		// }
+		// Quaternion.RotateTowards approximates pi so we stop rotating once the angle becomes close to pi
+		if (Vector3.Distance(transform.position, propUpTargetPosition) <= 0.02f && Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
+		{
+			Debug.Log("Done Making upright");
+			_propUp = false;
+			return;
+		}
 		transform.position = Vector3.SmoothDamp(transform.position, propUpTargetPosition, ref _vel, 1f);
 		// transform.forward = Vector3.SmoothDamp(transform.forward, _lastRot, ref _rot, 1f);
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, _lastRot, 1f );
