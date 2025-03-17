@@ -14,6 +14,7 @@ public class WheelBehaviour : MonoBehaviour
 		_cartMovement = rb.GetComponent<CartMovement>();
 		smoke.Stop();
 		sparks.Stop();
+		sparks.Clear();
 	}
 
 	// Update is called once per frame
@@ -40,7 +41,8 @@ public class WheelBehaviour : MonoBehaviour
 		}
 		else
 		{
-			sparks.Pause();
+			sparks.Stop();
+			sparks.Clear();
 		}
 	}
 

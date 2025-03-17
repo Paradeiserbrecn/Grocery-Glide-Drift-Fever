@@ -10,6 +10,8 @@ public class CartMovement : MonoBehaviour
 	public bool _ragdoll = false;
 	private bool _propUp = false;
 	private Vector3 _lastRot, _vel = Vector3.zero;
+	private Vector3 _rot = Vector3.zero;
+	private Vector3 lastRotFactor = new Vector3(1, 0, 1);
 	private Rigidbody _cart;
 	[SerializeField] private float thrust = 100;
 	[SerializeField] private float angular = 20;
@@ -25,7 +27,7 @@ public class CartMovement : MonoBehaviour
 
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
-	[SerializeField] public Transform propUpTargetPosition;
+	private Vector3 propUpTargetPosition;
 
 
 
@@ -47,12 +49,14 @@ public class CartMovement : MonoBehaviour
 	{
 		if (_ragdoll && Input.GetKeyDown("r"))
 		{
+			propUpTargetPosition = transform.position + new Vector3(0, 1, 0);
 			_cart.useGravity = false;
 			_propUp = true;
-			Debug.Log("R");
+			_lastRot.y = 0;
 		}
 
 		else{
+			_lastRot = transform.forward;
 			_weightPenalty = (3 - (weight / weightMax)) / 3;
 			_verticalAxis = Input.GetAxisRaw("Vertical");
 			_horizontalAxis = Input.GetAxisRaw("Horizontal");
@@ -172,6 +176,7 @@ public class CartMovement : MonoBehaviour
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
-		transform.position=Vector3.SmoothDamp(transform.position, propUpTargetPosition.position, ref _vel, 1f);
+		transform.position = Vector3.SmoothDamp(transform.position, propUpTargetPosition, ref _vel, 1f);
+		transform.forward = Vector3.SmoothDamp(transform.forward, _lastRot, ref _rot, 1f);
 	}
 }
