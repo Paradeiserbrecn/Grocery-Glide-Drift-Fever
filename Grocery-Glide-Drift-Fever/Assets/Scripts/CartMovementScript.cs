@@ -30,6 +30,8 @@ public class CartMovement : MonoBehaviour
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
 	private Vector3 propUpTargetPosition;
+	
+	private 
 
 
 
@@ -52,7 +54,7 @@ public class CartMovement : MonoBehaviour
 		if (_ragdoll && Input.GetKeyDown("r"))
 		{
 			propUpTargetPosition = transform.position + new Vector3(0, 1, 0);
-			_cart.useGravity = false;
+			_cart.isKinematic = true;
 			_propUp = true;
 			// _lastRot.y = 0;
 			_lastRot.x = 0;
@@ -99,14 +101,24 @@ public class CartMovement : MonoBehaviour
     {
         if (_ragdoll)
 		{
-			// {
-			// 	//TODO: detect being upright
-			// }
-
 			if (_propUp)
 			{
+				if (Vector3.Distance(transform.position, propUpTargetPosition) <= 0.02f && Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
+				{
+					ActivateNormal();
+					return;
+				}
 				MakeUpright();
 			}
+			else
+			{
+				if (Vector3.Dot(transform.up, Vector3.up) > 0.9f && _cart.velocity.magnitude < 1f && _cart.velocity.magnitude < 0.1f && _cart.angularVelocity.magnitude < 0.1f)
+				{
+					ActivateNormal();
+				}
+			}
+
+
 		}
     }
 
@@ -148,6 +160,7 @@ public class CartMovement : MonoBehaviour
 		_ragdoll = false;
 		_cart.isKinematic = false;
 		_boxCollider.material = slipperyMaterial;
+		_propUp = false;
 	}
 
 	private void ActivateRagdoll()
@@ -182,14 +195,9 @@ public class CartMovement : MonoBehaviour
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
 		// Quaternion.RotateTowards approximates pi so we stop rotating once the angle becomes close to pi
-		if (Vector3.Distance(transform.position, propUpTargetPosition) <= 0.02f && Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
-		{
-			Debug.Log("Done Making upright");
-			_propUp = false;
-			return;
-		}
-		transform.position = Vector3.SmoothDamp(transform.position, propUpTargetPosition, ref _vel, 1f);
+
+		transform.position = Vector3.SmoothDamp(transform.position, propUpTargetPosition, ref _vel, 0.5f);
 		// transform.forward = Vector3.SmoothDamp(transform.forward, _lastRot, ref _rot, 1f);
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, _lastRot, 1f );
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, _lastRot, 2f );
 	}
 }
