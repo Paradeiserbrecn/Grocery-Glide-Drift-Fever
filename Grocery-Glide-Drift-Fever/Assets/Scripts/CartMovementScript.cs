@@ -31,7 +31,6 @@ public class CartMovement : MonoBehaviour
 	public bool BoostReady { get; private set; } = false;
 	private Vector3 propUpTargetPosition;
 	
-	private 
 
 
 
