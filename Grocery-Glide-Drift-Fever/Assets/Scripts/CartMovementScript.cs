@@ -17,6 +17,7 @@ public class CartMovement : MonoBehaviour
 	private Rigidbody _cart;
 	[SerializeField] private float thrust = 100;
 	[SerializeField] private float angular = 20;
+	[SerializeField] private float physicalBaseWeight = 25;
 	[SerializeField] private float weightMax = 100;
 	[SerializeField] private float minDrift = 5;
 	[SerializeField] private float weight;
@@ -31,7 +32,8 @@ public class CartMovement : MonoBehaviour
 	public bool BoostReady { get; private set; } = false;
 	private Vector3 propUpTargetPosition;
 	
-
+	private float  _verticalAxis, _horizontalAxis;
+	//private float _weightPenalty;
 
 
 	private void Start()
@@ -44,9 +46,10 @@ public class CartMovement : MonoBehaviour
 		_tippingThreshold = _fixedTippingThreshold;
 		_minBoost = thrust * 2;
 		CheckTipping();
+		UpdateWeight();
 	}
 
-	private float _weightPenalty, _verticalAxis, _horizontalAxis;
+
 
 	private void Update()
 	{
@@ -62,7 +65,7 @@ public class CartMovement : MonoBehaviour
 
 		else{
 			// Debug.Log(transform.rotation.x + " " + transform.rotation.y + " " + transform.rotation.z + " " + transform.rotation.w);
-			_weightPenalty = (3 - (weight / weightMax)) / 3;
+			//_weightPenalty = (3 - (weight / weightMax)) / 3;
 			_verticalAxis = Input.GetAxisRaw("Vertical");
 			_horizontalAxis = Input.GetAxisRaw("Horizontal");
 			
@@ -71,23 +74,23 @@ public class CartMovement : MonoBehaviour
 			{
 				//thrust
 				case > 0:
-					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * _weightPenalty * 3f));
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 3f));
 					break;
 				//brake
 				case < 0:
-					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * _weightPenalty * 0.6f));
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 0.6f));
 					break;
 			}
 
 			if (_horizontalAxis != 0) //rotation
 			{
-				_cart.AddTorque(transform.up * (_horizontalAxis * angular * _weightPenalty * 1f));
+				_cart.AddTorque(transform.up * (_horizontalAxis * angular * 1f));
 			}
 
 			_driftValue = DriftValue();
 			IsDrifting = CheckIsDrifting();
 			CheckTipping();
-			AddDriftScore(_weightPenalty);
+			AddDriftScore();
 
 			//Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
 
@@ -168,11 +171,11 @@ public class CartMovement : MonoBehaviour
 		_boxCollider.material = ragdollMaterial;
 	}
 
-	private void AddDriftScore(float weightPenalty)
+	private void AddDriftScore()
 	{
 		if (IsDrifting)
 		{
-			_driftScore += _driftValue * Time.deltaTime * 10 * weightPenalty;
+			_driftScore += _driftValue * Time.deltaTime * 10;
 			if (_driftScore > _minBoost)
 			{
 				BoostReady = true;
@@ -189,6 +192,11 @@ public class CartMovement : MonoBehaviour
 			_driftScore = 0;
 			BoostReady = false;
 		}
+	}
+
+	private void UpdateWeight()
+	{
+		_cart.mass = physicalBaseWeight + weight*0.2f;
 	}
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
