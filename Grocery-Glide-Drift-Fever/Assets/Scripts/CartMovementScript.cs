@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -9,7 +10,8 @@ public class CartMovement : MonoBehaviour
 {
 	public bool _ragdoll = false;
 	private bool _propUp = false;
-	private Vector3 _lastRot, _vel = Vector3.zero;
+	private Quaternion  _lastRot = Quaternion.identity;
+	private Vector3 _vel = Vector3.zero;
 	private Vector3 _rot = Vector3.zero;
 	private Vector3 lastRotFactor = new Vector3(1, 0, 1);
 	private Rigidbody _cart;
@@ -35,7 +37,7 @@ public class CartMovement : MonoBehaviour
 	{
 		_boxCollider = GetComponent<BoxCollider>();
 		_cart = GetComponent<Rigidbody>();
-		_lastRot = transform.forward;
+		_lastRot = transform.rotation;
 		_cart.maxAngularVelocity = 50;
 		_fixedTippingThreshold = thrust / 7;
 		_tippingThreshold = _fixedTippingThreshold;
@@ -52,11 +54,13 @@ public class CartMovement : MonoBehaviour
 			propUpTargetPosition = transform.position + new Vector3(0, 1, 0);
 			_cart.useGravity = false;
 			_propUp = true;
-			_lastRot.y = 0;
+			// _lastRot.y = 0;
+			_lastRot.x = 0;
+			_lastRot.z = 0;
 		}
 
 		else{
-			_lastRot = transform.forward;
+			// Debug.Log(transform.rotation.x + " " + transform.rotation.y + " " + transform.rotation.z + " " + transform.rotation.w);
 			_weightPenalty = (3 - (weight / weightMax)) / 3;
 			_verticalAxis = Input.GetAxisRaw("Vertical");
 			_horizontalAxis = Input.GetAxisRaw("Horizontal");
@@ -115,6 +119,7 @@ public class CartMovement : MonoBehaviour
 	{
 		if (_driftValue > _tippingThreshold)
 		{
+			_lastRot = transform.rotation;
 			ActivateRagdoll();
 		}
 	}
@@ -176,7 +181,13 @@ public class CartMovement : MonoBehaviour
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
 	{
+		// if (transform.rotation.Compare(_lastRot, 0) && transform.position.Compare(propUpTargetPosition, 0))
+		// {
+		// 	Debug.Log("Done Making upright");
+		// 	return;
+		// }
 		transform.position = Vector3.SmoothDamp(transform.position, propUpTargetPosition, ref _vel, 1f);
-		transform.forward = Vector3.SmoothDamp(transform.forward, _lastRot, ref _rot, 1f);
+		// transform.forward = Vector3.SmoothDamp(transform.forward, _lastRot, ref _rot, 1f);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, _lastRot, 1f );
 	}
 }
