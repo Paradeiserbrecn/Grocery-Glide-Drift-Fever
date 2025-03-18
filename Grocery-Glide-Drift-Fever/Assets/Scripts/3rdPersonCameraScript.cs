@@ -30,16 +30,18 @@ public class ThirdPersonCamera : MonoBehaviour
 
 	private void Update()
 	{
-		if (!cart._ragdoll)
+		if (!cart.ragdoll)
 		{
 			_globalCameraSpacingVector = -_cartTransform.forward * dist;
 			_globalCameraSpacingVector.y = height;
 
 			_globalCameraPos = _cartTransform.position + _globalCameraSpacingVector;
 			
-			Debug.DrawLine(_cartTransform.position + _cartTransform.up * lookHeight, _globalCameraPos);
+			
 			//This makes the camera avoid terrain, so you do not end up looking at a wall
-			bool deiMama = Physics.Raycast(_cartTransform.position - _cartTransform.up * lookHeight, _globalCameraSpacingVector, out hitInfo, 100000f);
+			_lookPoint = _cartTransform.position - _cartTransform.up * lookHeight;
+			Debug.DrawLine(_lookPoint, _globalCameraPos);
+			bool deiMama = Physics.Raycast(_lookPoint, _globalCameraPos - _lookPoint , out hitInfo, _globalCameraSpacingVector.magnitude);
 			if (deiMama)
 			{
 				Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");

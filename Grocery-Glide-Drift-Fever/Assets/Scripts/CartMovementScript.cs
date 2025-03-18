@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Transform))]
 public class CartMovement : MonoBehaviour
 {
-	public bool _ragdoll = false;
+	public bool ragdoll = false;
 	private bool _propUp = false;
 	private Quaternion  _lastRot = Quaternion.identity;
 	private Vector3 _vel = Vector3.zero;
@@ -19,10 +19,19 @@ public class CartMovement : MonoBehaviour
 	[SerializeField] private float angular = 20;
 	[SerializeField] private float physicalBaseWeight = 25;
 	[SerializeField] private float weightMax = 100;
-	[SerializeField] private float minDrift = 5;
 	[SerializeField] private float weight;
 	[SerializeField] private WheelBehaviour[] wheels;
-	private float _driftBoost = 1, _tippingThreshold, _fixedTippingThreshold, _minBoost, _driftValue, _driftScore;
+ 	private float _tippingThreshold;
+	[SerializeField] private float minDrift = 5;
+ 	[SerializeField] private float minBoost;
+    [SerializeField] private float minBoostFactor;
+    [SerializeField] private float maxBoostStrength;
+	private float _driftBoost = 1; 
+    [SerializeField] private float tippingDivisor;
+ 	[SerializeField] private float fixedTippingThreshold;
+    [SerializeField] private float maxBoostedTippingThreshold;
+ 	 private float _driftValue; 
+ 	private float _driftScore;
 
 	[SerializeField] private PhysicMaterial slipperyMaterial;
 	[SerializeField] private PhysicMaterial ragdollMaterial;
@@ -42,9 +51,9 @@ public class CartMovement : MonoBehaviour
 		_cart = GetComponent<Rigidbody>();
 		_lastRot = transform.rotation;
 		_cart.maxAngularVelocity = 50;
-		_fixedTippingThreshold = thrust / 7;
-		_tippingThreshold = _fixedTippingThreshold;
-		_minBoost = thrust * 2;
+		fixedTippingThreshold = thrust * tippingDivisor;
+		_tippingThreshold = fixedTippingThreshold;
+		minBoost = thrust * minBoostFactor;
 		CheckTipping();
 		UpdateWeight();
 	}
@@ -53,7 +62,7 @@ public class CartMovement : MonoBehaviour
 
 	private void Update()
 	{
-		if (_ragdoll && Input.GetKeyDown("r"))
+		if (ragdoll && Input.GetKeyDown("r"))
 		{
 			propUpTargetPosition = transform.position + new Vector3(0, 1, 0);
 			_cart.isKinematic = true;
@@ -95,13 +104,13 @@ public class CartMovement : MonoBehaviour
 			//Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
 
 			//interpolating values
-			_tippingThreshold += (_fixedTippingThreshold - _tippingThreshold) * 0.005f;
+			_tippingThreshold += (fixedTippingThreshold - _tippingThreshold) * 0.005f;
 			_driftBoost += (1 - _driftBoost) * 0.01f;
 		}
 	}
     private void FixedUpdate()
     {
-        if (_ragdoll)
+        if (ragdoll)
 		{
 			if (_propUp)
 			{
@@ -140,7 +149,7 @@ public class CartMovement : MonoBehaviour
 
 	private bool CheckIsDrifting()
 	{
-		if (!_ragdoll && _driftValue > minDrift)
+		if (!ragdoll && _driftValue > minDrift)
 		{
 			foreach (WheelBehaviour wheel in wheels)
 			{
@@ -159,7 +168,7 @@ public class CartMovement : MonoBehaviour
 
 	private void ActivateNormal()
 	{
-		_ragdoll = false;
+		ragdoll = false;
 		_cart.isKinematic = false;
 		_boxCollider.material = slipperyMaterial;
 		_propUp = false;
@@ -167,7 +176,7 @@ public class CartMovement : MonoBehaviour
 
 	private void ActivateRagdoll()
 	{
-		_ragdoll = true;
+		ragdoll = true;
 		_boxCollider.material = ragdollMaterial;
 	}
 
@@ -176,7 +185,7 @@ public class CartMovement : MonoBehaviour
 		if (IsDrifting)
 		{
 			_driftScore += _driftValue * Time.deltaTime * 10;
-			if (_driftScore > _minBoost)
+			if (_driftScore > minBoost)
 			{
 				BoostReady = true;
 			}
@@ -185,8 +194,8 @@ public class CartMovement : MonoBehaviour
 		{
 			if (BoostReady)
 			{
-				_driftBoost += Mathf.Min(_driftScore / 350, 1);
-				_tippingThreshold += Mathf.Min(_driftScore / 150, 8);
+				_driftBoost += Mathf.Min(_driftScore / 350, maxBoostStrength);
+				_tippingThreshold += Mathf.Min(_driftScore / 150, maxBoostedTippingThreshold);
 			}
 
 			_driftScore = 0;
