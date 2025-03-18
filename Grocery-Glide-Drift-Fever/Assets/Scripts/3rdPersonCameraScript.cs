@@ -19,6 +19,9 @@ public class ThirdPersonCamera : MonoBehaviour
 	private Vector3 _dirVel = Vector3.zero;
 	private Vector3 _globalCameraSpacingVector;
 	private Vector3 _globalCameraPos;
+	private Vector3 _lookPoint;
+
+	private RaycastHit hitInfo = new RaycastHit();
 
 	private void Start()
 	{
@@ -33,8 +36,17 @@ public class ThirdPersonCamera : MonoBehaviour
 			_globalCameraSpacingVector.y = height;
 
 			_globalCameraPos = _cartTransform.position + _globalCameraSpacingVector;
-			transform.position = Vector3.SmoothDamp(transform.position, _globalCameraPos, ref _vel, smooth);
 			
+			Debug.DrawLine(_cartTransform.position + _cartTransform.up * lookHeight, _globalCameraPos);
+			//This makes the camera avoid terrain, so you do not end up looking at a wall
+			bool deiMama = Physics.Raycast(_cartTransform.position - _cartTransform.up * lookHeight, _globalCameraSpacingVector, out hitInfo, 100000f);
+			if (deiMama)
+			{
+				Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
+				_globalCameraPos = hitInfo.point;
+			}
+			
+			transform.position = Vector3.SmoothDamp(transform.position, _globalCameraPos, ref _vel, smooth);
 			transform.forward = (_cartTransform.position - (transform.position + _cartTransform.up * lookHeight)).normalized;
 
 		}

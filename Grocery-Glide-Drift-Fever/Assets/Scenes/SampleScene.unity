@@ -136,12 +136,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1317000083}
     - target: {fileID: 2641824917721329758, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2641824917721329758, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_Name
       value: wheel FL
+      objectReference: {fileID: 0}
+    - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446362990304686107, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3446362990304686107, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_IsActive
@@ -205,12 +217,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1317000083}
     - target: {fileID: 2641824917721329758, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2641824917721329758, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_Name
       value: wheel BL
+      objectReference: {fileID: 0}
+    - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446362990304686107, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3446362990304686107, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_IsActive
@@ -474,7 +498,6 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
-  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: 3rdPersonCam
   m_TagString: MainCamera
@@ -574,27 +597,6 @@ MonoBehaviour:
   height: 1.8
   smooth: 0.1
   lookHeight: -1
---- !u!135 &963194230
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1138585144
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -608,12 +610,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1317000083}
     - target: {fileID: 2641824917721329758, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2641824917721329758, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_Name
       value: wheel BR
+      objectReference: {fileID: 0}
+    - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446362990304686107, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3446362990304686107, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_IsActive
@@ -678,9 +692,9 @@ GameObject:
   - component: {fileID: 1317000084}
   - component: {fileID: 1317000083}
   - component: {fileID: 1317000082}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cart
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -993,9 +1007,21 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 1317000083}
+    - target: {fileID: 2641824917721329758, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_Name
       value: wheel FR
+      objectReference: {fileID: 0}
+    - target: {fileID: 3399713243745925937, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446362990304686107, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6277050299381905077, guid: 4043f725b897ee84c9115c49e95bd366, type: 3}
       propertyPath: m_LocalPosition.x
