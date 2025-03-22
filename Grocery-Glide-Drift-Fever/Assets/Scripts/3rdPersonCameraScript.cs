@@ -11,7 +11,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	[SerializeField] private CartMovement cart;
 	private Transform _cartTransform;
 	[SerializeField] private float dist = 5.0f;
-	[SerializeField] private float ragdollDist = 1000.0f;
+	[SerializeField] private float ragdollDist = 10.0f;
 	[SerializeField] private float height = 0.5f;
 	[SerializeField] private float smooth = 0.1f;
 	[SerializeField] private float lookHeight = 1f;
@@ -20,8 +20,10 @@ public class ThirdPersonCamera : MonoBehaviour
 	private Vector3 _globalCameraSpacingVector;
 	private Vector3 _globalCameraPos;
 	private Vector3 _lookPoint;
+	private Vector3 _direction;
 
 	private RaycastHit hitInfo = new RaycastHit();
+	private RaycastHit ragdolHitInfo = new RaycastHit();
 
 	private void Start()
 	{
@@ -36,16 +38,17 @@ public class ThirdPersonCamera : MonoBehaviour
 			_globalCameraSpacingVector.y = height;
 
 			_globalCameraPos = _cartTransform.position + _globalCameraSpacingVector;
-			
+			_direction =  _globalCameraPos - _lookPoint;
 			
 			//This makes the camera avoid terrain, so you do not end up looking at a wall
 			_lookPoint = _cartTransform.position - _cartTransform.up * lookHeight;
 			Debug.DrawLine(_lookPoint, _globalCameraPos);
-			bool deiMama = Physics.Raycast(_lookPoint, _globalCameraPos - _lookPoint , out hitInfo, _globalCameraSpacingVector.magnitude);
+			bool deiMama = Physics.Raycast(_lookPoint, _direction , out hitInfo, _direction.magnitude);
+			
 			if (deiMama)
 			{
-				Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
-				_globalCameraPos = hitInfo.point;
+				//Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
+				_globalCameraPos = hitInfo.point+ hitInfo.normal * 0.2f;
 			}
 			
 			transform.position = Vector3.SmoothDamp(transform.position, _globalCameraPos, ref _vel, smooth);
@@ -54,11 +57,24 @@ public class ThirdPersonCamera : MonoBehaviour
 		}
 		else
 		{
-			transform.position += (_cartTransform.position - transform.position).normalized *
-			                      (Vector3.Distance(transform.position, _cartTransform.position) - ragdollDist);
+			_lookPoint = _cartTransform.position - _cartTransform.up * lookHeight;
+
+			_direction = transform.position - _cartTransform.position;
+			_globalCameraPos =  _cartTransform.position + (transform.position - _cartTransform.position).normalized * ragdollDist;
 			
 			
-			transform.forward = Vector3.SmoothDamp(transform.forward, (_cartTransform.position - (transform.position + _cartTransform.up * lookHeight)).normalized, ref _dirVel, smooth);
+			
+			bool deiMama = Physics.Raycast(_lookPoint, _direction , out ragdolHitInfo, _direction.magnitude);
+			if (deiMama)
+			{
+				Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
+				_globalCameraPos = hitInfo.point+ hitInfo.normal * 0.2f;
+			}
+			Debug.DrawLine(_lookPoint, _globalCameraPos);
+
+			transform.position = Vector3.SmoothDamp(transform.position, _globalCameraPos, ref _vel, smooth);
+			
+			transform.forward = Vector3.SmoothDamp(transform.forward,  _cartTransform.position - transform.position, ref _dirVel, smooth);
 		}
 
 	}

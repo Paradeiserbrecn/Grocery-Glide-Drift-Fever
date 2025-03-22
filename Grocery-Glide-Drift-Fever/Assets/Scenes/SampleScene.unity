@@ -1030,23 +1030,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdoll: 0
-  thrust: 50
+  thrust: 70
   angular: 20
   physicalBaseWeight: 25
-  weightMax: 0
+  weightMax: 100
   weight: 0
   wheels:
   - {fileID: 7896877140689356553}
   - {fileID: 1555589267}
   - {fileID: 1549125722}
   - {fileID: 1749259491}
-  minDrift: 5
-  minBoost: 0
-  minBoostFactor: 0
-  maxBoostStrength: 0
-  tippingDivisor: 0
-  fixedTippingThreshold: 0
-  maxBoostedTippingThreshold: 0
+  minDrift: 3
+  minBoost: 70
+  minBoostFactor: 1
+  maxBoostStrength: 1
+  tippingDivisor: 12
+  fixedTippingThreshold: 6
+  maxBoostedTippingThreshold: 8
   slipperyMaterial: {fileID: 13400000, guid: 243d6995701271c40bd9dd714d6b13b3, type: 2}
   ragdollMaterial: {fileID: 13400000, guid: 0118df6fea0d440419ab02b1f7e947ba, type: 2}
 --- !u!54 &1317000083

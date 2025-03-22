@@ -51,7 +51,7 @@ public class CartMovement : MonoBehaviour
 		_cart = GetComponent<Rigidbody>();
 		_lastRot = transform.rotation;
 		_cart.maxAngularVelocity = 50;
-		fixedTippingThreshold = thrust * tippingDivisor;
+		fixedTippingThreshold = thrust / tippingDivisor;
 		_tippingThreshold = fixedTippingThreshold;
 		minBoost = thrust * minBoostFactor;
 		CheckTipping();
@@ -128,8 +128,6 @@ public class CartMovement : MonoBehaviour
 					ActivateNormal();
 				}
 			}
-
-
 		}
     }
 
@@ -182,6 +180,7 @@ public class CartMovement : MonoBehaviour
 
 	private void AddDriftScore()
 	{
+		//Debug.Log("Drift Value: " + DriftValue() + ", Drift Score: " + _driftScore + ", drifitng: " + IsDrifting + ", boost ready: " + BoostReady);
 		if (IsDrifting)
 		{
 			_driftScore += _driftValue * Time.deltaTime * 10;
