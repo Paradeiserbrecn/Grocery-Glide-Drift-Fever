@@ -24,13 +24,11 @@ public class CartMovement : MonoBehaviour
  	private float _tippingThreshold;
 	[SerializeField] private float minDrift = 5;
  	[SerializeField] private float minBoost;
-    [SerializeField] private float minBoostFactor;
     [SerializeField] private float maxBoostStrength;
 	private float _driftBoost = 1; 
-    [SerializeField] private float tippingDivisor;
  	[SerializeField] private float fixedTippingThreshold;
     [SerializeField] private float maxBoostedTippingThreshold;
- 	 private float _driftValue; 
+	private float _driftValue; 
  	private float _driftScore;
 
 	[SerializeField] private PhysicMaterial slipperyMaterial;
@@ -51,9 +49,7 @@ public class CartMovement : MonoBehaviour
 		_cart = GetComponent<Rigidbody>();
 		_lastRot = transform.rotation;
 		_cart.maxAngularVelocity = 50;
-		fixedTippingThreshold = thrust / tippingDivisor;
 		_tippingThreshold = fixedTippingThreshold;
-		minBoost = thrust * minBoostFactor;
 		CheckTipping();
 		UpdateWeight();
 	}
@@ -200,6 +196,12 @@ public class CartMovement : MonoBehaviour
 			_driftScore = 0;
 			BoostReady = false;
 		}
+	}
+
+	public void AddWeight(int add)
+	{
+		weight += add;
+		UpdateWeight();
 	}
 
 	private void UpdateWeight()

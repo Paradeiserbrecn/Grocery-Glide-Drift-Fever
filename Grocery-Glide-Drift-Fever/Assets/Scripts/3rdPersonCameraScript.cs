@@ -64,13 +64,13 @@ public class ThirdPersonCamera : MonoBehaviour
 			
 			
 			
-			bool deiMama = Physics.Raycast(_lookPoint, _direction , out ragdolHitInfo, _direction.magnitude);
-			if (deiMama)
-			{
-				Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
-				_globalCameraPos = hitInfo.point+ hitInfo.normal * 0.2f;
-			}
-			Debug.DrawLine(_lookPoint, _globalCameraPos);
+			//bool deiMama = Physics.Raycast(_lookPoint, _direction , out ragdolHitInfo, _direction.magnitude);
+			//if (deiMama)
+			//{
+			//	Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
+			//	_globalCameraPos = hitInfo.point+ hitInfo.normal * 0.2f;
+			//}
+			//Debug.DrawLine(_lookPoint, _globalCameraPos);
 
 			transform.position = Vector3.SmoothDamp(transform.position, _globalCameraPos, ref _vel, smooth);
 			

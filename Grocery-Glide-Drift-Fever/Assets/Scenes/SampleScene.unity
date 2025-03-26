@@ -1010,6 +1010,7 @@ GameObject:
   - component: {fileID: 1317000084}
   - component: {fileID: 1317000083}
   - component: {fileID: 1317000082}
+  - component: {fileID: 1317000088}
   m_Layer: 3
   m_Name: Cart
   m_TagString: Player
@@ -1042,9 +1043,7 @@ MonoBehaviour:
   - {fileID: 1749259491}
   minDrift: 3
   minBoost: 70
-  minBoostFactor: 1
   maxBoostStrength: 1
-  tippingDivisor: 12
   fixedTippingThreshold: 6
   maxBoostedTippingThreshold: 8
   slipperyMaterial: {fileID: 13400000, guid: 243d6995701271c40bd9dd714d6b13b3, type: 2}
@@ -1166,6 +1165,18 @@ Transform:
   - {fileID: 1749259490}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1317000088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317000081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1274379b359a07f47afede502e2c1afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1477878722
 GameObject:
   m_ObjectHideFlags: 0
