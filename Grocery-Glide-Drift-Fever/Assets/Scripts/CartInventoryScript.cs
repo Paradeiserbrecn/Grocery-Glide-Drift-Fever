@@ -11,7 +11,7 @@ public class CartInventory : MonoBehaviour
     private void AddItem(Item item)
     {
         inventory.Add(item);
-        cart.AddWeight(item.weight);
+        cart.AddWeight(item.Weight);
         
         //TODO instance prefab in cart
         //TODO change sound in audio
@@ -20,7 +20,7 @@ public class CartInventory : MonoBehaviour
     private void DeleteItem(Item item)
     {
         inventory.Remove(item);
-        cart.AddWeight(-item.weight);
+        cart.AddWeight(-item.Weight);
 
         //TODO get rid of prefab in cart
         //TODO change sound in audio
