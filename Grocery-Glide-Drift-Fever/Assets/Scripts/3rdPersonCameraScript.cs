@@ -49,7 +49,6 @@ public class ThirdPersonCamera : MonoBehaviour
 			
 			if (deiMama)
 			{
-				//Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
 				_globalCameraPos = hitInfo.point+ hitInfo.normal * 0.2f;
 			}
 			
@@ -65,12 +64,10 @@ public class ThirdPersonCamera : MonoBehaviour
 			
 			_lookPoint = _cartTransform.position - _cartTransform.up * lookHeight;
 			
-			Debug.Log("Dei mama is so groß wie des: " + (transform.position - _cartTransform.position));
 			Debug.DrawLine(_lookPoint, _globalCameraPos,  Color.red);
 			bool deiMama = Physics.Raycast(_lookPoint, _direction , out ragdolHitInfo, _direction.magnitude, LayerMask.GetMask("Environment"));
 			if (deiMama)
 			{
-				Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
 				_globalCameraPos = ragdolHitInfo.point+ ragdolHitInfo.normal * 0.2f;
 			}
 			Debug.DrawLine(_lookPoint, _globalCameraPos, Color.blue);

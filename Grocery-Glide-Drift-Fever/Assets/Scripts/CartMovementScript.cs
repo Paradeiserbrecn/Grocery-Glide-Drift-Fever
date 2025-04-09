@@ -8,47 +8,49 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Transform))]
 public class CartMovement : MonoBehaviour
 {
-	public bool ragdoll = false;
-	private bool _propUp = false;
-	private Quaternion  _lastRot = Quaternion.identity;
-	private Vector3 _vel = Vector3.zero;
-	private Vector3 _rot = Vector3.zero;
-	private Vector3 lastRotFactor = new Vector3(1, 0, 1);
+	#region Class Variables
+	[Header("Components")]
+	[SerializeField] private PhysicMaterial slipperyMaterial;
+	[SerializeField] private PhysicMaterial ragdollMaterial;
+	[SerializeField] private Transform _raycastOrigin;
+	[SerializeField] private WheelBehaviour[] wheels;
 	private Rigidbody _cart;
+	private BoxCollider _boxCollider;
+	private CapsuleCollider _capsuleCollider;
+	[Header("Properties")]
 	[SerializeField] private float thrust = 100;
 	[SerializeField] private float angular = 20;
 	[SerializeField] private float physicalBaseWeight = 25;
 	[SerializeField] private float weightMax = 100;
 	[SerializeField] private float weight;
-	[SerializeField] private WheelBehaviour[] wheels;
- 	private float _tippingThreshold;
 	[SerializeField] private float minDrift = 5;
  	[SerializeField] private float minBoost;
     [SerializeField] private float maxBoostStrength;
-	private float _driftBoost = 1; 
  	[SerializeField] private float fixedTippingThreshold;
     [SerializeField] private float maxBoostedTippingThreshold;
-	private float _driftValue; 
- 	private float _driftScore;
-
-	[SerializeField] private PhysicMaterial slipperyMaterial;
-	[SerializeField] private PhysicMaterial ragdollMaterial;
-	private BoxCollider _boxCollider;
-
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
-	private Vector3 propUpTargetPosition;
+	private Vector3 _vel = Vector3.zero;
+	[Header("DEBUG")]
+	public bool ragdoll = false;
+	[SerializeField] private bool _propUp = false;
+ 	[SerializeField] private float _tippingThreshold;
+	[SerializeField] private float _driftBoost = 1; 
+	[SerializeField] private float _driftValue; 
+ 	[SerializeField] private float _driftScore;
 
-	
-	private bool floorDetected;
-	
-	private float  _verticalAxis, _horizontalAxis;
-	//private float _weightPenalty;
+	#region utility
 
+	#endregion
+	// Utility vars
+	private Quaternion  _lastRot = Quaternion.identity;
+	private Vector3 _propUpTargetPosition;
+	#endregion
 
 	private void Start()
 	{
 		_boxCollider = GetComponent<BoxCollider>();
+		_capsuleCollider = GetComponent<CapsuleCollider>();
 		_cart = GetComponent<Rigidbody>();
 		_lastRot = transform.rotation;
 		_cart.maxAngularVelocity = 50;
@@ -58,21 +60,10 @@ public class CartMovement : MonoBehaviour
 	}
 
 
-
+	private float  _verticalAxis, _horizontalAxis;	
 	private void Update()
 	{
-		if (ragdoll && Input.GetKeyDown("r"))
-		{
-			propUpTargetPosition = transform.position + new Vector3(0, 1, 0);
-			_cart.isKinematic = true;
-			_propUp = true;
-			// _lastRot.y = 0;
-			_lastRot.x = 0;
-			_lastRot.z = 0;
-		}
-
-		else{
-			// Debug.Log(transform.rotation.x + " " + transform.rotation.y + " " + transform.rotation.z + " " + transform.rotation.w);
+		if(!ragdoll){
 			//_weightPenalty = (3 - (weight / weightMax)) / 3;
 			_verticalAxis = Input.GetAxisRaw("Vertical");
 			_horizontalAxis = Input.GetAxisRaw("Horizontal");
@@ -101,11 +92,21 @@ public class CartMovement : MonoBehaviour
 			CheckCrashed();
 			AddDriftScore();
 
-			//Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
 
 			//interpolating values
 			_tippingThreshold += (fixedTippingThreshold - _tippingThreshold) * 0.005f;
 			_driftBoost += (1 - _driftBoost) * 0.01f;
+
+			//Debug.Log(_cart.velocity.magnitude + ", " +_cart.angularVelocity.magnitude);
+		}
+
+		else if(Input.GetKeyDown("r")){
+			_propUpTargetPosition = transform.position + new Vector3(0, 1, 0);
+			_cart.isKinematic = true;
+			_propUp = true;
+			// _lastRot.y = 0;
+			_lastRot.x = 0;
+			_lastRot.z = 0;
 		}
 	}
     private void FixedUpdate()
@@ -113,7 +114,7 @@ public class CartMovement : MonoBehaviour
 	    if (!ragdoll) return;
 	    if (_propUp)
 	    {
-		    if (Vector3.Distance(transform.position, propUpTargetPosition) <= 0.02f && Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
+		    if (Vector3.Distance(transform.position, _propUpTargetPosition) <= 0.02f && Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
 		    {
 			    ActivateNormal();
 			    return;
@@ -162,16 +163,23 @@ public class CartMovement : MonoBehaviour
 		return false;
 	}
 
+	private bool _floorDetected;
 	private void CheckCrashed()
 	{
-		if (Vector3.Dot(transform.up, Vector3.up) < 0.5f && _cart.velocity.magnitude < 1f && _cart.angularVelocity.magnitude < 0.1f)
+		if (Vector3.Dot(transform.up, Vector3.up) < 0.9f)
 		{
-			floorDetected = Physics.Raycast(transform.position, transform.right , 5f, LayerMask.GetMask("Environment"));
-			floorDetected = floorDetected || Physics.Raycast(transform.position, -transform.right , 5f, LayerMask.GetMask("Environment"));
-			floorDetected = floorDetected || Physics.Raycast(transform.position, transform.forward , 5f, LayerMask.GetMask("Environment"));
-			floorDetected = floorDetected || Physics.Raycast(transform.position, -transform.forward , 5f, LayerMask.GetMask("Environment"));
-			floorDetected = floorDetected || Physics.Raycast(transform.position, transform.up, 5f, LayerMask.GetMask("Environment"));
-			if (floorDetected)
+
+			_floorDetected = Physics.Raycast(_raycastOrigin.position, _raycastOrigin.right , 0.45f, LayerMask.GetMask("Environment"));
+			Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.right * 0.45f,  Color.red);
+			_floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, -_raycastOrigin.right , 0.45f, LayerMask.GetMask("Environment"));
+			Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + -_raycastOrigin.right * 0.45f,  Color.red);
+			_floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward , 0.85f, LayerMask.GetMask("Environment"));
+			Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.forward * 0.85f,  Color.red);
+			_floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, -_raycastOrigin.forward , 0.85f, LayerMask.GetMask("Environment"));
+			Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + -_raycastOrigin.forward * 0.85f,  Color.red);
+			_floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, _raycastOrigin.up, 0.45f, LayerMask.GetMask("Environment"));
+			Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.up * 0.45f,  Color.red);
+			if (_floorDetected)
 			{
 				ActivateRagdoll();
 				Debug.Log("you crashed");
@@ -185,17 +193,20 @@ public class CartMovement : MonoBehaviour
 		_cart.isKinematic = false;
 		_boxCollider.material = slipperyMaterial;
 		_propUp = false;
+		_capsuleCollider.material =slipperyMaterial;
 	}
 
 	private void ActivateRagdoll()
 	{
 		ragdoll = true;
 		_boxCollider.material = ragdollMaterial;
+		_capsuleCollider.material = ragdollMaterial;
+		IsDrifting = false;
+		BoostReady = false;
 	}
 
 	private void AddDriftScore()
 	{
-		//Debug.Log("Drift Value: " + DriftValue() + ", Drift Score: " + _driftScore + ", drifitng: " + IsDrifting + ", boost ready: " + BoostReady);
 		if (IsDrifting)
 		{
 			_driftScore += _driftValue * Time.deltaTime * 10;
@@ -232,8 +243,7 @@ public class CartMovement : MonoBehaviour
 	{
 		// Quaternion.RotateTowards approximates pi so we stop rotating once the angle becomes close to pi
 
-		transform.position = Vector3.SmoothDamp(transform.position, propUpTargetPosition, ref _vel, 0.5f);
-		// transform.forward = Vector3.SmoothDamp(transform.forward, _lastRot, ref _rot, 1f);
+		transform.position = Vector3.SmoothDamp(transform.position, _propUpTargetPosition, ref _vel, 0.5f);
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, _lastRot, 2f );
 	}
 }
