@@ -27,9 +27,10 @@ public class CartMovement : MonoBehaviour
  	[SerializeField] private float minBoost;
     [SerializeField] private float maxBoostStrength;
  	[SerializeField] private float fixedTippingThreshold;
-    [SerializeField] private float maxBoostedTippingThreshold;
+    [SerializeField] private float maxTippingThresholdBoost;
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
+	public bool IsUpright { get; private set; } = false;
 	private Vector3 _vel = Vector3.zero;
 	[Header("DEBUG")]
 	public bool ragdoll = false;
@@ -38,6 +39,9 @@ public class CartMovement : MonoBehaviour
 	[SerializeField] private float _driftBoost = 1; 
 	[SerializeField] private float _driftValue; 
  	[SerializeField] private float _driftScore;
+	[SerializeField] private float _boostDecaySpeed;
+	[SerializeField] private float _tippingDecaySpeed;
+
 
 	#region utility
 
@@ -88,14 +92,16 @@ public class CartMovement : MonoBehaviour
 
 			_driftValue = DriftValue();
 			IsDrifting = CheckIsDrifting();
+
+			CheckUpright();
 			CheckTipping();
 			CheckCrashed();
 			AddDriftScore();
 
 
 			//interpolating values
-			_tippingThreshold += (fixedTippingThreshold - _tippingThreshold) * 0.005f;
-			_driftBoost += (1 - _driftBoost) * 0.01f;
+			_tippingThreshold += (fixedTippingThreshold - _tippingThreshold) * _tippingDecaySpeed * Time.deltaTime;
+			_driftBoost += (maxBoostStrength - _driftBoost) * _boostDecaySpeed * Time.deltaTime;
 
 			//Debug.Log(_cart.velocity.magnitude + ", " +_cart.angularVelocity.magnitude);
 		}
@@ -163,10 +169,14 @@ public class CartMovement : MonoBehaviour
 		return false;
 	}
 
+	private void CheckUpright(){
+		IsUpright = Vector3.Dot(transform.up, Vector3.up) > 0.9f;
+	}
+
 	private bool _floorDetected;
 	private void CheckCrashed()
 	{
-		if (Vector3.Dot(transform.up, Vector3.up) < 0.9f)
+		if (!IsUpright)
 		{
 
 			_floorDetected = Physics.Raycast(_raycastOrigin.position, _raycastOrigin.right , 0.45f, LayerMask.GetMask("Environment"));
@@ -219,8 +229,9 @@ public class CartMovement : MonoBehaviour
 		{
 			if (BoostReady)
 			{
-				_driftBoost += Mathf.Min(_driftScore / 350, maxBoostStrength);
-				_tippingThreshold += Mathf.Min(_driftScore / 150, maxBoostedTippingThreshold);
+				_driftBoost = 1  + Mathf.Min(_driftScore * maxBoostStrength / 200, maxBoostStrength);
+				_tippingThreshold = fixedTippingThreshold + Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
+				Debug.Log("boost: tipping threshold: min of(" + (_driftScore * maxTippingThresholdBoost / 200) + ", " + maxTippingThresholdBoost + "), driftBoost: " + _driftBoost);
 			}
 
 			_driftScore = 0;

@@ -11,7 +11,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	[SerializeField] private CartMovement cart;
 	private Transform _cartTransform;
 	[SerializeField] private float dist = 5.0f;
-	[SerializeField] private float ragdollDist = 10.0f;
+	[SerializeField] private float ragdollDist = 6.0f;
 	[SerializeField] private float height = 0.5f;
 	[SerializeField] private float smooth = 0.1f;
 	[SerializeField] private float lookHeight = 1f;
@@ -49,6 +49,7 @@ public class ThirdPersonCamera : MonoBehaviour
 			
 			if (deiMama)
 			{
+				//Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
 				_globalCameraPos = hitInfo.point+ hitInfo.normal * 0.2f;
 			}
 			

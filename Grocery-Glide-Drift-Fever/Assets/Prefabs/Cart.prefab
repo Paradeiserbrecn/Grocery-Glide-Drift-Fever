@@ -150,19 +150,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099316c9b2de8db4b8dd661968c05230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ragdoll: 0
-  thrust: 100
-  angular: 20
-  weightMax: 100
-  minDrift: 5
-  weight: 100
+  slipperyMaterial: {fileID: 13400000, guid: 243d6995701271c40bd9dd714d6b13b3, type: 2}
+  ragdollMaterial: {fileID: 13400000, guid: 0118df6fea0d440419ab02b1f7e947ba, type: 2}
+  _raycastOrigin: {fileID: 0}
   wheels:
   - {fileID: 5975591630088231857}
   - {fileID: 6791060805078533114}
   - {fileID: 79034927983511284}
   - {fileID: 7336716740639698110}
-  slipperyMaterial: {fileID: 13400000, guid: 243d6995701271c40bd9dd714d6b13b3, type: 2}
-  ragdollMaterial: {fileID: 13400000, guid: 0118df6fea0d440419ab02b1f7e947ba, type: 2}
+  thrust: 100
+  angular: 20
+  physicalBaseWeight: 25
+  weightMax: 100
+  weight: 0
+  minDrift: 5
+  minBoost: 0
+  maxBoostStrength: 0
+  fixedTippingThreshold: 0
+  maxTippingThresholdBoost: 0
+  ragdoll: 0
+  _propUp: 0
+  _tippingThreshold: 0
+  _driftBoost: 1
+  _driftValue: 0
+  _driftScore: 0
+  _boostDecaySpeed: 0
+  _tippingDecaySpeed: 0
 --- !u!1001 &2104276532953584947
 PrefabInstance:
   m_ObjectHideFlags: 0
