@@ -38,6 +38,9 @@ public class CartMovement : MonoBehaviour
 	public bool IsDrifting { get; private set; } = false;
 	public bool BoostReady { get; private set; } = false;
 	private Vector3 propUpTargetPosition;
+
+	
+	private bool floorDetected;
 	
 	private float  _verticalAxis, _horizontalAxis;
 	//private float _weightPenalty;
@@ -95,6 +98,7 @@ public class CartMovement : MonoBehaviour
 			_driftValue = DriftValue();
 			IsDrifting = CheckIsDrifting();
 			CheckTipping();
+			CheckCrashed();
 			AddDriftScore();
 
 			//Debug.Log(driftScore +" | "+ driftBoost + " | " + tippingThreshold);
@@ -106,25 +110,23 @@ public class CartMovement : MonoBehaviour
 	}
     private void FixedUpdate()
     {
-        if (ragdoll)
-		{
-			if (_propUp)
-			{
-				if (Vector3.Distance(transform.position, propUpTargetPosition) <= 0.02f && Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
-				{
-					ActivateNormal();
-					return;
-				}
-				MakeUpright();
-			}
-			else
-			{
-				if (Vector3.Dot(transform.up, Vector3.up) > 0.9f && _cart.velocity.magnitude < 1f && _cart.velocity.magnitude < 0.1f && _cart.angularVelocity.magnitude < 0.1f)
-				{
-					ActivateNormal();
-				}
-			}
-		}
+	    if (!ragdoll) return;
+	    if (_propUp)
+	    {
+		    if (Vector3.Distance(transform.position, propUpTargetPosition) <= 0.02f && Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
+		    {
+			    ActivateNormal();
+			    return;
+		    }
+		    MakeUpright();
+	    }
+	    else
+	    {
+		    if (Vector3.Dot(transform.up, Vector3.up) > 0.9f && _cart.velocity.magnitude < 0.1f && _cart.angularVelocity.magnitude < 0.1f)
+		    {
+			    ActivateNormal();
+		    }
+	    }
     }
 
     private float DriftValue()
@@ -158,6 +160,23 @@ public class CartMovement : MonoBehaviour
 			wheel.StopSmoke();
 		}
 		return false;
+	}
+
+	private void CheckCrashed()
+	{
+		if (Vector3.Dot(transform.up, Vector3.up) < 0.5f && _cart.velocity.magnitude < 1f && _cart.angularVelocity.magnitude < 0.1f)
+		{
+			floorDetected = Physics.Raycast(transform.position, transform.right , 5f, LayerMask.GetMask("Environment"));
+			floorDetected = floorDetected || Physics.Raycast(transform.position, -transform.right , 5f, LayerMask.GetMask("Environment"));
+			floorDetected = floorDetected || Physics.Raycast(transform.position, transform.forward , 5f, LayerMask.GetMask("Environment"));
+			floorDetected = floorDetected || Physics.Raycast(transform.position, -transform.forward , 5f, LayerMask.GetMask("Environment"));
+			floorDetected = floorDetected || Physics.Raycast(transform.position, transform.up, 5f, LayerMask.GetMask("Environment"));
+			if (floorDetected)
+			{
+				ActivateRagdoll();
+				Debug.Log("you crashed");
+			}
+		}
 	}
 
 	private void ActivateNormal()

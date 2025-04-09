@@ -45,7 +45,7 @@ public class ThirdPersonCamera : MonoBehaviour
 			//This makes the camera avoid terrain, so you do not end up looking at a wall
 			_lookPoint = _cartTransform.position - _cartTransform.up * lookHeight;
 			// Debug.DrawLine(_lookPoint, _globalCameraPos);
-			bool deiMama = Physics.Raycast(_lookPoint, _direction , out hitInfo, _direction.magnitude, LayerMask.GetMask("Default"));
+			bool deiMama = Physics.Raycast(_lookPoint, _direction , out hitInfo, _direction.magnitude, LayerMask.GetMask("Environment"));
 			
 			if (deiMama)
 			{
@@ -67,7 +67,7 @@ public class ThirdPersonCamera : MonoBehaviour
 			
 			Debug.Log("Dei mama is so groß wie des: " + (transform.position - _cartTransform.position));
 			Debug.DrawLine(_lookPoint, _globalCameraPos,  Color.red);
-			bool deiMama = Physics.Raycast(_lookPoint, _direction , out ragdolHitInfo, _direction.magnitude, LayerMask.GetMask("Default"));
+			bool deiMama = Physics.Raycast(_lookPoint, _direction , out ragdolHitInfo, _direction.magnitude, LayerMask.GetMask("Environment"));
 			if (deiMama)
 			{
 				Debug.Log("Hallo freunde, ich darf doch freunde sagen?!");
