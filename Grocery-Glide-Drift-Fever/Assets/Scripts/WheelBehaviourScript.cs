@@ -7,6 +7,7 @@ public class WheelBehaviour : MonoBehaviour
 	[SerializeField] private Rigidbody rb;
 	private CartMovement _cartMovement;
 	[SerializeField] private ParticleSystem smoke, sparks;
+	[SerializeField] private TrailRenderer streaks;
 
 
 	private void Start()
@@ -25,16 +26,7 @@ public class WheelBehaviour : MonoBehaviour
 			transform.LookAt(transform.position + rb.velocity);
 			transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
 		}
-
-		if (_cartMovement.IsDrifting)
-		{
-			smoke.Play();
-		}
-		else
-		{
-			smoke.Stop();
-		}
-
+		
 		if (_cartMovement.BoostReady)
 		{
 			sparks.Play();
@@ -44,6 +36,15 @@ public class WheelBehaviour : MonoBehaviour
 			sparks.Stop();
 			sparks.Clear();
 		}
+
+		if (_cartMovement.IsDrifting)
+		{
+			smoke.Play();
+		}
+		else
+		{
+			smoke.Stop();
+		}
 	}
 
 	/// <summary>
@@ -51,23 +52,27 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySmoke()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 1f))
+		if (Physics.Raycast(transform.position, -transform.up, 0.1f))
 		{
+			Debug.Log("hello?");
 			smoke.Play();
+			streaks.widthMultiplier = 1f;
 		}
 	}
 
 	public void StopSmoke()
 	{
 		smoke.Stop();
+		streaks.widthMultiplier = 0f;
 	}
+
 	
 	/// <summary>
 	/// Checks if the Wheel is grounded and if so, plays spark particles
 	/// </summary>
 	public void PlaySpark()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 1f))
+		if (Physics.Raycast(transform.position, -transform.up, 0.05f))
 		{
 			sparks.Play();
 		}
