@@ -26,25 +26,6 @@ public class WheelBehaviour : MonoBehaviour
 			transform.LookAt(transform.position + rb.velocity);
 			transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
 		}
-		
-		if (_cartMovement.BoostReady)
-		{
-			sparks.Play();
-		}
-		else
-		{
-			sparks.Stop();
-			sparks.Clear();
-		}
-
-		if (_cartMovement.IsDrifting)
-		{
-			smoke.Play();
-		}
-		else
-		{
-			smoke.Stop();
-		}
 	}
 
 	/// <summary>
@@ -52,18 +33,21 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySmoke()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 0.1f))
+		if (Physics.Raycast(transform.position, -transform.up, 0.14f, LayerMask.GetMask("Environment")))
 		{
-			Debug.Log("hello?");
 			smoke.Play();
-			streaks.widthMultiplier = 1f;
+			streaks.emitting = true;
+		}
+		else
+		{
+			streaks.emitting = false;
 		}
 	}
 
 	public void StopSmoke()
 	{
 		smoke.Stop();
-		streaks.widthMultiplier = 0f;
+		streaks.emitting = false;
 	}
 
 	
@@ -72,7 +56,7 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySpark()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 0.05f))
+		if (Physics.Raycast(transform.position, -transform.up, 0.14f,  LayerMask.GetMask("Environment")))
 		{
 			sparks.Play();
 		}
@@ -81,5 +65,6 @@ public class WheelBehaviour : MonoBehaviour
 	public void StopSpark()
 	{
 		sparks.Stop();
+		sparks.Clear();
 	}
 }
