@@ -77,17 +77,17 @@ public class CartMovement : MonoBehaviour
 			{
 				//thrust
 				case > 0:
-					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 3f));
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 100f * Time.deltaTime));
 					break;
 				//brake
 				case < 0:
-					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 0.6f));
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 30f * Time.deltaTime));
 					break;
 			}
 
 			if (_horizontalAxis != 0) //rotation
 			{
-				_cart.AddTorque(transform.up * (_horizontalAxis * angular * 1f));
+				_cart.AddTorque(transform.up * (_horizontalAxis * angular * 40f * Time.deltaTime));
 			}
 
 			_driftValue = DriftValue();
