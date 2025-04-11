@@ -165,6 +165,7 @@ public class CartMovement : MonoBehaviour
 		foreach (WheelBehaviour wheel in wheels)
 		{
 			wheel.StopSmoke();
+			wheel.StopSpark();
 		}
 		return false;
 	}
@@ -228,6 +229,10 @@ public class CartMovement : MonoBehaviour
 			if (_driftScore > minBoost)
 			{
 				BoostReady = true;
+				foreach (WheelBehaviour wheel in wheels)
+				{
+					wheel.PlaySpark();
+				}
 			}
 		}
 		else
@@ -237,18 +242,6 @@ public class CartMovement : MonoBehaviour
 				_driftBoost = 1  + Mathf.Min(_driftScore * maxBoostStrength / 200, maxBoostStrength);
 				_tippingThreshold = fixedTippingThreshold + Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
 				Debug.Log("boost: tipping threshold: min of(" + (_driftScore * maxTippingThresholdBoost / 200) + ", " + maxTippingThresholdBoost + "), driftBoost: " + _driftBoost);
-				
-				foreach (WheelBehaviour wheel in wheels)
-				{
-					wheel.PlaySpark();
-				}
-			}
-			else
-			{
-				foreach (WheelBehaviour wheel in wheels)
-				{
-					wheel.StopSpark();
-				}
 			}
 
 			_driftScore = 0;
