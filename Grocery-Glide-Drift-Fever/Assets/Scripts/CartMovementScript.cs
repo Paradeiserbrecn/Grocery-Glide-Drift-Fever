@@ -13,6 +13,7 @@ public class CartMovement : MonoBehaviour
 	[SerializeField] private PhysicMaterial slipperyMaterial;
 	[SerializeField] private PhysicMaterial ragdollMaterial;
 	[SerializeField] private Transform _raycastOrigin;
+	[SerializeField] private ParticleSystem boostParticles;
 	[SerializeField] private WheelBehaviour[] wheels;
 	private Rigidbody _cart;
 	private BoxCollider _boxCollider;
@@ -77,17 +78,17 @@ public class CartMovement : MonoBehaviour
 			{
 				//thrust
 				case > 0:
-					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 100f * Time.deltaTime));
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 110f * Time.deltaTime));
 					break;
 				//brake
 				case < 0:
-					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 30f * Time.deltaTime));
+					_cart.AddForce(transform.forward * (_verticalAxis * thrust * _driftBoost * 40f * Time.deltaTime));
 					break;
 			}
 
 			if (_horizontalAxis != 0) //rotation
 			{
-				_cart.AddTorque(transform.up * (_horizontalAxis * angular * 40f * Time.deltaTime));
+				_cart.AddTorque(transform.up * (_horizontalAxis * angular * 50f * Time.deltaTime));
 			}
 
 			_driftValue = DriftValue();
@@ -103,6 +104,9 @@ public class CartMovement : MonoBehaviour
 			_tippingThreshold += (fixedTippingThreshold - _tippingThreshold) * _tippingDecaySpeed * Time.deltaTime;
 			_driftBoost += (maxBoostStrength - _driftBoost) * _boostDecaySpeed * Time.deltaTime;
 
+			HandleBoostParticles();
+
+			
 			//Debug.Log(_cart.velocity.magnitude + ", " +_cart.angularVelocity.magnitude);
 		}
 
@@ -258,6 +262,15 @@ public class CartMovement : MonoBehaviour
 	private void UpdateWeight()
 	{
 		_cart.mass = physicalBaseWeight + weight*0.2f;
+	}
+
+	private void HandleBoostParticles(){
+		if (_driftBoost > 1.1f){
+			boostParticles.Play();
+		}
+		else{
+			boostParticles.Stop();
+		}
 	}
 	
 	private void MakeUpright() //raises the cart and changes its rotation to the last rotation before crashing
