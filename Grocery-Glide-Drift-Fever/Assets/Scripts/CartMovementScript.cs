@@ -27,6 +27,8 @@ public class CartMovement : MonoBehaviour
 	[SerializeField] private float minDrift = 5;
  	[SerializeField] private float minBoost;
     [SerializeField] private float maxBoostStrength;
+    [SerializeField] private float emptyTippingThreshold;
+    [SerializeField] private float fullTippingThreshold;
  	[SerializeField] private float fixedTippingThreshold;
     [SerializeField] private float maxTippingThresholdBoost;
 	public bool IsDrifting { get; private set; } = false;
@@ -255,6 +257,8 @@ public class CartMovement : MonoBehaviour
 
 	public void AddWeight(int add)
 	{
+		if (weight + add > weightMax) return;
+		
 		weight += add;
 		UpdateWeight();
 	}
@@ -262,6 +266,7 @@ public class CartMovement : MonoBehaviour
 	private void UpdateWeight()
 	{
 		_cart.mass = physicalBaseWeight + weight*0.2f;
+		//fixedTippingThreshold = emptyTippingThreshold - ((emptyTippingThreshold - fullTippingThreshold)/100 * weight);
 	}
 
 	private void HandleBoostParticles(){
