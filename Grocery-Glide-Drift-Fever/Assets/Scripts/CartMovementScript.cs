@@ -71,7 +71,6 @@ public class CartMovement : MonoBehaviour
 	private void Update()
 	{
 		if(!ragdoll){
-			//_weightPenalty = (3 - (weight / weightMax)) / 3;
 			_verticalAxis = Input.GetAxisRaw("Vertical");
 			_horizontalAxis = Input.GetAxisRaw("Horizontal");
 			
@@ -220,6 +219,8 @@ public class CartMovement : MonoBehaviour
 		_capsuleCollider.material = ragdollMaterial;
 		IsDrifting = false;
 		BoostReady = false;
+		boostParticles.Stop();
+		boostParticles.Clear();
 		foreach (WheelBehaviour wheel in wheels)
 		{
 			wheel.StopSmoke();
@@ -266,7 +267,7 @@ public class CartMovement : MonoBehaviour
 	private void UpdateWeight()
 	{
 		_cart.mass = physicalBaseWeight + weight*0.2f;
-		//fixedTippingThreshold = emptyTippingThreshold - ((emptyTippingThreshold - fullTippingThreshold)/100 * weight);
+		fixedTippingThreshold = emptyTippingThreshold - ((emptyTippingThreshold - fullTippingThreshold)/weightMax * weight);
 	}
 
 	private void HandleBoostParticles(){

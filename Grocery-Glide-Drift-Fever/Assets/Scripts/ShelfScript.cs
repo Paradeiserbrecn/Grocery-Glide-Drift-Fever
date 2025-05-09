@@ -78,6 +78,7 @@ public class ShelfScript : MonoBehaviour
     public void TakeItem()
     {
         cone.SetActive(false);
+		itemSpawn.SetActive(false);
         hasItem = false;
         StartCoroutine(Restock());
     }
@@ -85,6 +86,7 @@ public class ShelfScript : MonoBehaviour
     private void RestockItem()
     {
         cone.SetActive(true);
+        itemSpawn.SetActive(true);
         hasItem = true;
     }
     
