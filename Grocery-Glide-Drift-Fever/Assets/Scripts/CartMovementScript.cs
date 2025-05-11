@@ -219,8 +219,7 @@ public class CartMovement : MonoBehaviour
 		_capsuleCollider.material = ragdollMaterial;
 		IsDrifting = false;
 		BoostReady = false;
-		boostParticles.Stop();
-		boostParticles.Clear();
+		_driftBoost = 1;
 		foreach (WheelBehaviour wheel in wheels)
 		{
 			wheel.StopSmoke();
