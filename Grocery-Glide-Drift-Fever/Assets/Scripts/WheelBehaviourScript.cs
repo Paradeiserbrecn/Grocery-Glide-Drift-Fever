@@ -9,7 +9,6 @@ public class WheelBehaviour : MonoBehaviour
 	[SerializeField] private ParticleSystem smoke, sparks;
 	[SerializeField] private TrailRenderer streaks;
 
-
 	private void Start()
 	{
 		_cartMovement = rb.GetComponent<CartMovement>();
@@ -18,7 +17,6 @@ public class WheelBehaviour : MonoBehaviour
 		sparks.Clear();
 	}
 
-	// Update is called once per frame
 	private void FixedUpdate()
 	{
 		if (new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > 0)

@@ -39,29 +39,31 @@ public class CartInventory : MonoBehaviour
         {
             if (collidingShelves.Count > 0)
             {
+                collidingShelves.Sort(ShelfByDistanceComparator); 
                 ShelfScript nearest = collidingShelves[0];
-                float minDist = float.MinValue;
-                if (collidingShelves.Count > 1)
-                {
-                    foreach (ShelfScript shelf in collidingShelves)
-                    {
-                        float dist = (shelf.GetPickupLocation().transform.position - this.transform.position).magnitude;
-                        if (dist < minDist)
-                        {
-                            minDist = dist;
-                            nearest = shelf;
-                        }
-                    }
-                }
                 if (nearest.hasItem)
                 {
-                    AddItem(nearest.GetItem());
+                    AddItem(nearest.Item);
                     nearest.TakeItem();
                 }
             }
         }
     }
 
+    /// <summary>
+    /// Compares two shelves via their distance to the cart and follows the general CompareTo method functionality
+    /// </summary>
+    /// <param name="shelf">The shelf first shelf</param>
+    /// <param name="other">The other shelf to compare `shelf` to</param>
+    /// <returns> less than 0 if the distance to the cart of `shelf` is smaller than `other`.
+    /// 0 if the distance to the cart of `shelf` is exactly the same as `other`.
+    /// greater than 0 if the distance to the cart of `other` is greater than `shelf`</returns>
+    private int ShelfByDistanceComparator(ShelfScript shelf, ShelfScript other)
+    {
+        return Vector3.Distance(shelf.transform.position, this.transform.position)
+            .CompareTo(Vector3.Distance(other.transform.position, this.transform.position));
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.GetComponentInParent<ShelfScript>());
