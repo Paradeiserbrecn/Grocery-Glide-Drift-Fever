@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Object = System.Object;
@@ -10,15 +11,15 @@ public class CartInventory : MonoBehaviour
     [SerializeField] private CartMovement cart;
     private ArrayList inventory = new ArrayList();
     [SerializeField] private CapsuleCollider itemRange;
-    
+
     private List<ShelfScript> collidingShelves = new List<ShelfScript>();
 
     private void AddItem(Item item)
     {
         inventory.Add(item);
         cart.AddWeight(item.Weight);
-        
-        
+
+
         //TODO instance prefab in cart
         //TODO change sound in audio
     }
@@ -39,8 +40,9 @@ public class CartInventory : MonoBehaviour
         {
             if (collidingShelves.Count > 0)
             {
-                collidingShelves.Sort(ShelfByDistanceComparator); 
-                ShelfScript nearest = collidingShelves[0];
+                ShelfScript nearest = collidingShelves
+                    .OrderBy(shelf => Vector3.Distance(shelf.transform.position, this.transform.position))
+                    .First();
                 if (nearest.hasItem)
                 {
                     AddItem(nearest.Item);
@@ -63,7 +65,7 @@ public class CartInventory : MonoBehaviour
         return Vector3.Distance(shelf.transform.position, this.transform.position)
             .CompareTo(Vector3.Distance(other.transform.position, this.transform.position));
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.GetComponentInParent<ShelfScript>());
