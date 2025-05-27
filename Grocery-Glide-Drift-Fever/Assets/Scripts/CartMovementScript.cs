@@ -24,7 +24,9 @@ public class CartMovement : MonoBehaviour
     [Header("Properties")] [SerializeField]
     private float thrust = 100;
 
+    [SerializeField] private float jumpForce = 150;
     [SerializeField] private float angular = 20;
+    
     [SerializeField] private float physicalBaseWeight = 25;
     [SerializeField] private float weightMax = 100;
     [SerializeField] private float weight;
@@ -78,6 +80,12 @@ public class CartMovement : MonoBehaviour
     {
         if (!ragdoll)
         {
+            if (Input.GetKeyDown("space"))
+            {
+                Debug.Log("jump");
+                _cart.AddForce(Vector3.up * jumpForce,ForceMode.Impulse);
+            }
+            
             _driftValue = DriftValue();
             IsDrifting = CheckIsDrifting();
 
@@ -105,6 +113,8 @@ public class CartMovement : MonoBehaviour
             _lastRot.x = 0;
             _lastRot.z = 0;
         }
+        
+        
     }
 
     private void FixedUpdate()

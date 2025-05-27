@@ -555,6 +555,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cart
       objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: jumpForce
+      value: 150
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
