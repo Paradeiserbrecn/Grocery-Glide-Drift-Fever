@@ -12,12 +12,15 @@ public class CartInventory : MonoBehaviour
     private ArrayList inventory = new ArrayList();
     [SerializeField] private CapsuleCollider itemRange;
 
+    [SerializeField] private ShoppingList shoppingList;
+
     private List<ShelfScript> collidingShelves = new List<ShelfScript>();
 
     private void AddItem(Item item)
     {
         inventory.Add(item);
         cart.AddWeight(item.Weight);
+        shoppingList.PickUp(item);
 
 
         //TODO instance prefab in cart
@@ -28,6 +31,7 @@ public class CartInventory : MonoBehaviour
     {
         inventory.Remove(item);
         cart.AddWeight(-item.Weight);
+        shoppingList.Drop(item);
 
         //TODO get rid of prefab in cart
         //TODO change sound in audio
