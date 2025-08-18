@@ -83,11 +83,7 @@ public class ShelfScript : MonoBehaviour
         // We only ever want to be able to restock if the item has been taken out of the shelf
         IEnumerator Restock()
         {
-            Debug.Log("Started Coroutine at timestamp : " + Time.time);
-
             yield return new WaitForSeconds(restockTime);
-
-            Debug.Log("Finished Coroutine at timestamp : " + Time.time);
 
             cone.SetActive(true);
             itemSpawn.SetActive(true);

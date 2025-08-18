@@ -74,12 +74,17 @@ public class ShoppingList : MonoBehaviour
         }
     }
     
-    public void Buy(Item item)
+    public void BuyAll(CartInventory inventory)
     {
-        if (_items.ContainsKey(item))
+        foreach (Item item in _items.Keys)
         {
-            _items[item].Bought = true;
-            _items[item].UIItemText.SetText(item.ItemName, true);
+            if (_items[item].InCart)
+            {
+                _items[item].InCart = false;
+                _items[item].Bought = true;
+                _items[item].UIItemText.SetText(item.ItemName,true);
+                inventory.DropItem(item);
+            }
         }
     }
 }

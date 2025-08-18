@@ -20,6 +20,7 @@ public class CartMovement : MonoBehaviour
     private Rigidbody _cart;
     private BoxCollider _boxCollider;
     private CapsuleCollider _capsuleCollider;
+    private CartInventory _inventory;
 
     [Header("Properties")] [SerializeField]
     private float thrust = 100;
@@ -64,6 +65,8 @@ public class CartMovement : MonoBehaviour
         _boxCollider = GetComponent<BoxCollider>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _cart = GetComponent<Rigidbody>();
+        _inventory = GetComponent<CartInventory>();
+        
         _lastRot = transform.rotation;
         _cart.maxAngularVelocity = 50;
         _tippingThreshold = fixedTippingThreshold;
@@ -171,6 +174,7 @@ public class CartMovement : MonoBehaviour
         {
             _lastRot = transform.rotation;
             ActivateRagdoll();
+            _inventory.DropAll();
         }
     }
 

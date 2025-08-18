@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using Object = System.Object;
 
 public class CartInventory : MonoBehaviour
 {
@@ -27,14 +25,34 @@ public class CartInventory : MonoBehaviour
         //TODO change sound in audio
     }
 
-    private void DeleteItem(Item item)
+    public void DropItem(Item item)
     {
         inventory.Remove(item);
         cart.AddWeight(-item.Weight);
         shoppingList.Drop(item);
+        Debug.Log("dropped: " + item.ItemName);
+        PrintInv();
+        
 
         //TODO get rid of prefab in cart
         //TODO change sound in audio
+    }
+
+    public void DropAll()
+    {
+        foreach (Item item in inventory)
+        {
+            DropItem(item);
+        }
+    }
+
+    public void PrintInv()
+    {
+        Debug.Log("Inventory: ");
+        foreach (Item item in inventory)
+        {
+            Debug.Log(item.ItemName);
+        }
     }
 
 
@@ -72,12 +90,17 @@ public class CartInventory : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.GetComponentInParent<ShelfScript>());
-        collidingShelves.Add(other.GetComponentInParent<ShelfScript>());
+        if (other.CompareTag("Shelf"))
+        {
+            collidingShelves.Add(other.GetComponentInParent<ShelfScript>());
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        collidingShelves.Remove(other.GetComponentInParent<ShelfScript>());
+        if (other.CompareTag("Shelf"))
+        { 
+            collidingShelves.Remove(other.GetComponentInParent<ShelfScript>());
+        }
     }
 }
