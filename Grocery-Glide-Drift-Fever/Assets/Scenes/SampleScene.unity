@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -554,6 +554,50 @@ PrefabInstance:
     - target: {fileID: 1431080374522984759, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
       propertyPath: m_Name
       value: Cart
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: raycastOrigin
+      value: 
+      objectReference: {fileID: 1712487680}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: fmodEvent.Path
+      value: event:/Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: _fmodEvent.Path
+      value: event:/Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: fmodEvent.Guid.Data1
+      value: 1531304575
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: fmodEvent.Guid.Data2
+      value: 1142589460
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: fmodEvent.Guid.Data3
+      value: 148718467
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: fmodEvent.Guid.Data4
+      value: -2077067591
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: _fmodEvent.Guid.Data1
+      value: 1531304575
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: _fmodEvent.Guid.Data2
+      value: 1142589460
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: _fmodEvent.Guid.Data3
+      value: 148718467
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: _fmodEvent.Guid.Data4
+      value: -2077067591
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1721,8 +1765,8 @@ GameObject:
   m_Component:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
-  - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: 3rdPersonCam
   m_TagString: MainCamera
@@ -1730,14 +1774,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &963194226
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
@@ -1822,6 +1858,20 @@ MonoBehaviour:
   height: 1.8
   smooth: 0.1
   lookHeight: -1
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &979672150
 GameObject:
   m_ObjectHideFlags: 0
@@ -2673,6 +2723,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2000090614}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1712487680 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7732446031715475069, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+  m_PrefabInstance: {fileID: 358102731}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2000090613
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="EncodableAsset" id="{34640715-da30-4cae-bf88-3062601bf696}">
+		<property name="assetPath">
+			<value>Main_Boost/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{9d02b072-015b-451b-8bf2-5fac14e125ef}</destination>
+		</relationship>
+	</object>
+</objects>

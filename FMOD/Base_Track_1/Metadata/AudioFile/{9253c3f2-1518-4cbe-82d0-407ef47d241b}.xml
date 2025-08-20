@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{9253c3f2-1518-4cbe-82d0-407ef47d241b}">
+		<property name="assetPath">
+			<value>Main_Boost/Main_boost 6-Break Scatty 174 bpm.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>5.5814058956916099</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{9d02b072-015b-451b-8bf2-5fac14e125ef}</destination>
+		</relationship>
+	</object>
+</objects>

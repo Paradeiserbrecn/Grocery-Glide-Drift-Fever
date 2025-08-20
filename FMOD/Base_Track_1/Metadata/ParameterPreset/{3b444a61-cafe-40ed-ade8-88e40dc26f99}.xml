@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{3b444a61-cafe-40ed-ade8-88e40dc26f99}">
+		<property name="name">
+			<value>Drift Boost</value>
+		</property>
+		<relationship name="folder">
+			<destination>{c1ed12b7-a081-43e5-8679-f89cfd838879}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{5822acf2-5216-4fd0-9b95-dd4bfa03b9f7}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{5822acf2-5216-4fd0-9b95-dd4bfa03b9f7}">
+		<property name="minimum">
+			<value>1</value>
+		</property>
+		<property name="maximum">
+			<value>10</value>
+		</property>
+		<property name="initialValue">
+			<value>1</value>
+		</property>
+	</object>
+</objects>

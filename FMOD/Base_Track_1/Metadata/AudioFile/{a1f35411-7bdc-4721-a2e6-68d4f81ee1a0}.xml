@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{a1f35411-7bdc-4721-a2e6-68d4f81ee1a0}">
+		<property name="assetPath">
+			<value>Main_Drift/Main_drift 4-Drum and Bass Straight 172 bpm.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>5.5814058956916099</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{9d02b072-015b-451b-8bf2-5fac14e125ef}</destination>
+		</relationship>
+	</object>
+</objects>
