@@ -165,7 +165,7 @@ public class CartMovement : MonoBehaviour
 
     private float DriftValue()
     {
-        return Mathf.Abs(Vector3.Dot(transform.right, _cart.velocity) * ((1 + (weight / weightMax)) / 2));
+        return Mathf.Abs(Vector3.Dot(transform.right, _cart.velocity) / 2);
     }
 
     private void CheckTipping()
@@ -174,7 +174,7 @@ public class CartMovement : MonoBehaviour
         {
             _lastRot = transform.rotation;
             ActivateRagdoll();
-            _inventory.DropAll();
+            //_inventory.DropAll();
         }
     }
 
