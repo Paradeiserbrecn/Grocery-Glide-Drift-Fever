@@ -7,7 +7,7 @@ using UnityEngine;
 public class CartInventory : MonoBehaviour
 {
     [SerializeField] private CartMovement cart;
-    private ArrayList inventory = new ArrayList();
+    private List<Item> inventory = new List<Item>();
     [SerializeField] private CapsuleCollider itemRange;
 
     [SerializeField] private ShoppingList shoppingList;
@@ -40,19 +40,20 @@ public class CartInventory : MonoBehaviour
 
     public void DropAll()
     {
-        foreach (Item item in inventory)
+        while(inventory.Count > 0)
         {
-            DropItem(item);
+            DropItem(inventory[0]);
         }
     }
 
     public void PrintInv()
     {
-        Debug.Log("Inventory: ");
+        String text = "Inventory: \n";
         foreach (Item item in inventory)
         {
-            Debug.Log(item.ItemName);
+            text += (item.ItemName + ", ");
         }
+        Debug.Log(text);
     }
 
 
