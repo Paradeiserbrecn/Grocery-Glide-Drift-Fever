@@ -628,6 +628,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cart
       objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: thrust
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981849206203248135, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: maxSpeed
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 5112713721077343102, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 128
