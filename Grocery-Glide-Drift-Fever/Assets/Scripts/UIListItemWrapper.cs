@@ -18,7 +18,7 @@ public class UIListItemWrapper : MonoBehaviour
 
     public void SetText(string text, bool strikethrough)
     {
-        if (strikethrough) itemName.text = "<s color=#f34567>" + text + "</s>";
+        if (strikethrough) itemName.text = "<s>" + text + "</s>";
         else itemName.text = text;
     }
 }

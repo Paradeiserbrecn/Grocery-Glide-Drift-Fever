@@ -138,7 +138,7 @@ public class CartMovement : MonoBehaviour
     private void ApplyDrag()
     {
         float drag = Mathf.Pow(thrust * 0.9f , _cart.velocity.magnitude / maxSpeed) -1;
-        Debug.Log("speed: " + _cart.velocity.magnitude + ", Drag: " + drag );
+        //Debug.Log("speed: " + _cart.velocity.magnitude + ", Drag: " + drag );
         _cart.AddForce(-_cart.velocity.normalized * (drag *  110f * Time.deltaTime));
     }
 
@@ -261,6 +261,8 @@ public class CartMovement : MonoBehaviour
             wheel.StopSmoke();
             wheel.StopSpark();
         }
+        _inventory.DropAll(false);
+        //TODO start minigame
     }
 
     private void AddDriftScore()
@@ -284,8 +286,8 @@ public class CartMovement : MonoBehaviour
                 _driftBoost = 1 + Mathf.Min(_driftScore * maxBoostStrength / 200, maxBoostStrength);
                 _tippingThreshold = fixedTippingThreshold +
                                     Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
-                Debug.Log("boost: tipping threshold: min of(" + (_driftScore * maxTippingThresholdBoost / 200) + ", " +
-                          maxTippingThresholdBoost + "), driftBoost: " + _driftBoost);
+                //Debug.Log("boost: tipping threshold: min of(" + (_driftScore * maxTippingThresholdBoost / 200) + ", " +
+                 //         maxTippingThresholdBoost + "), driftBoost: " + _driftBoost);
             }
 
             _driftScore = 0;
@@ -293,17 +295,18 @@ public class CartMovement : MonoBehaviour
         }
     }
 
-    public void AddWeight(int add)
+    public bool AddWeight(int add)
     {
-        if (weight + add > weightMax) return;
+        if (weight + add > weightMax) return false;
 
         weight += add;
         UpdateWeight();
+        return true;
     }
 
     private void UpdateWeight()
     {
-        Debug.Log("tipping multiplier: " + (1 + weightFactor * (weight / weightMax)));
+        //Debug.Log("tipping multiplier: " + (1 + weightFactor * (weight / weightMax)));
         _cart.mass = physicalBaseWeight + weight * 0.2f;
     }
 

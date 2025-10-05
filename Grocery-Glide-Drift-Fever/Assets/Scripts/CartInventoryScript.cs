@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CartInventory : MonoBehaviour
@@ -14,35 +15,36 @@ public class CartInventory : MonoBehaviour
 
     private List<ShelfScript> collidingShelves = new List<ShelfScript>();
 
-    private void AddItem(Item item)
+    private bool AddItem(Item item)
     {
-        inventory.Add(item);
-        cart.AddWeight(item.Weight);
-        shoppingList.PickUp(item);
 
-
+        if (cart.AddWeight(item.Weight))
+        {
+            inventory.Add(item); 
+            shoppingList.PickUp(item); 
+            return true;
+        }
+        return false;
         //TODO instance prefab in cart
         //TODO change sound in audio
     }
 
-    public void DropItem(Item item)
+    public void DropItem(Item item, bool buy)
     {
         inventory.Remove(item);
         cart.AddWeight(-item.Weight);
-        shoppingList.Drop(item);
-        Debug.Log("dropped: " + item.ItemName);
-        PrintInv();
+        shoppingList.Drop(item,buy);
         
 
         //TODO get rid of prefab in cart
         //TODO change sound in audio
     }
 
-    public void DropAll()
+    public void DropAll(bool buy)
     {
         while(inventory.Count > 0)
         {
-            DropItem(inventory[0]);
+            DropItem(inventory[0], buy);
         }
     }
 
@@ -68,8 +70,9 @@ public class CartInventory : MonoBehaviour
                     .First();
                 if (nearest.hasItem)
                 {
-                    AddItem(nearest.Item);
-                    nearest.TakeItem();
+                    if(AddItem(nearest.Item)) nearest.TakeItem();
+                    
+                    //TODO: signify that the cart is full
                 }
             }
         }
@@ -94,6 +97,7 @@ public class CartInventory : MonoBehaviour
         if (other.CompareTag("Shelf"))
         {
             collidingShelves.Add(other.GetComponentInParent<ShelfScript>());
+            Debug.Log("entered: colliding with "+collidingShelves.Count+" shelves");
         }
     }
 
@@ -102,6 +106,12 @@ public class CartInventory : MonoBehaviour
         if (other.CompareTag("Shelf"))
         { 
             collidingShelves.Remove(other.GetComponentInParent<ShelfScript>());
+            Debug.Log("exited: colliding with "+collidingShelves.Count+" shelves");
         }
+    }
+
+    public List<Item> GetInventory()
+    {
+        return new List<Item>(inventory);
     }
 }

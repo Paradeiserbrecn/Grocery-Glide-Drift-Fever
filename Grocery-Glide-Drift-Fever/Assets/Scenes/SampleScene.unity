@@ -461,6 +461,10 @@ PrefabInstance:
       propertyPath: item
       value: 
       objectReference: {fileID: 11400000, guid: 00c4eecd09ef383499e38b4df3cb73a8, type: 2}
+    - target: {fileID: 4818205745768294515, guid: 7c42013dad956784d880cdc92b6f547b, type: 3}
+      propertyPath: restockTime
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -638,10 +642,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5112713721077343102, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 128
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6413699274488136689, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6413699274488136689, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
+      value: 384
+      objectReference: {fileID: 0}
+    - target: {fileID: 7008426645689174205, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 7008426645689174205, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
       value: 384
       objectReference: {fileID: 0}
     - target: {fileID: 8309754737604390831, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
@@ -3252,7 +3268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shop: {fileID: 549593553}
   listItemPrefab: {fileID: 4827493484191389737, guid: 1037c4755dc9d744b8e253f4ab735e06, type: 3}
-  listLength: 1
+  listLength: 2
 --- !u!1 &2000090613
 GameObject:
   m_ObjectHideFlags: 0

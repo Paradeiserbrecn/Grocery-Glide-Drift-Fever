@@ -11,10 +11,10 @@ public class Shop : MonoBehaviour
     void Start()
     {
         _existingItems = GatherItems();
-        foreach (var item in _existingItems)
+        /*foreach (var item in _existingItems)
         {
             Debug.Log(item);
-        }
+        }*/
     }
 
     private HashSet<Item> GatherItems()
