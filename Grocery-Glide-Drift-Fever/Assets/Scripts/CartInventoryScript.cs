@@ -42,6 +42,8 @@ public class CartInventory : MonoBehaviour
 
     public void DropAll(bool buy)
     {
+        if (!cart.DEBUG_canDropAll) return;
+        
         while(inventory.Count > 0)
         {
             DropItem(inventory[0], buy);
@@ -70,10 +72,17 @@ public class CartInventory : MonoBehaviour
                     .First();
                 if (nearest.hasItem)
                 {
-                    if(AddItem(nearest.Item)) nearest.TakeItem();
-                    
-                    //TODO: signify that the cart is full
+                    if (AddItem(nearest.Item))
+                    {
+                        nearest.TakeItem();
+                    }
+                    else
+                    {
+                        //TODO: signify that the cart is full
+                        Debug.Log("No daddy im already fully wully xS"); //certified michl game
+                    }
                 }
+                
             }
         }
     }

@@ -39,7 +39,8 @@ public class CartMovement : MonoBehaviour
     public bool BoostReady { get; private set; } = false;
     public bool IsUpright { get; private set; } = false;
     private Vector3 _vel = Vector3.zero;
-    [Header("DEBUG")] public bool ragdoll = false;
+    [Header("DEBUG")] public bool DEBUG_canDropAll = true;
+    public bool ragdoll = false;
     [SerializeField] private bool _propUp = false;
     [SerializeField] private float _tippingThreshold;
     [SerializeField] private float _driftBoost = 1;
@@ -116,7 +117,8 @@ public class CartMovement : MonoBehaviour
         }
         if (_propUp)
         {
-            if (Vector3.Distance(transform.position, _propUpTargetPosition) <= 0.02f &&
+            Debug.Log("Making upright B)");
+            if (Vector3.Distance(transform.position, _propUpTargetPosition) <= 0.04f &&
                 Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
             {
                 ActivateNormal();
@@ -262,6 +264,7 @@ public class CartMovement : MonoBehaviour
             wheel.StopSpark();
         }
         _inventory.DropAll(false);
+        
         //TODO start minigame
     }
 
