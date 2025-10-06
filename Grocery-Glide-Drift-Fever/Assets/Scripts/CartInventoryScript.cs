@@ -4,33 +4,60 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using Object = System.Object;
 
 public class CartInventory : MonoBehaviour
 {
     [SerializeField] private CartMovement cart;
-    private ArrayList inventory = new ArrayList();
+    private List<Item> inventory = new List<Item>();
     [SerializeField] private CapsuleCollider itemRange;
+
+    [SerializeField] private ShoppingList shoppingList;
 
     private List<ShelfScript> collidingShelves = new List<ShelfScript>();
 
-    private void AddItem(Item item)
+    private bool AddItem(Item item)
     {
-        inventory.Add(item);
-        cart.AddWeight(item.Weight);
 
-
+        if (cart.AddWeight(item.Weight))
+        {
+            inventory.Add(item); 
+            shoppingList.PickUp(item); 
+            return true;
+        }
+        return false;
         //TODO instance prefab in cart
         //TODO change sound in audio
     }
 
-    private void DeleteItem(Item item)
+    public void DropItem(Item item, bool buy)
     {
         inventory.Remove(item);
         cart.AddWeight(-item.Weight);
+        shoppingList.Drop(item,buy);
+        
 
         //TODO get rid of prefab in cart
         //TODO change sound in audio
+    }
+
+    public void DropAll(bool buy)
+    {
+        if (!cart.DEBUG_canDropAll) return;
+        
+        while(inventory.Count > 0)
+        {
+            DropItem(inventory[0], buy);
+        }
+    }
+
+    public void PrintInv()
+    {
+        String text = "Inventory: \n";
+        foreach (Item item in inventory)
+        {
+            text += (item.ItemName + ", ");
+        }
+        Debug.Log(text);
     }
 
 
@@ -45,9 +72,17 @@ public class CartInventory : MonoBehaviour
                     .First();
                 if (nearest.hasItem)
                 {
-                    AddItem(nearest.Item);
-                    nearest.TakeItem();
+                    if (AddItem(nearest.Item))
+                    {
+                        nearest.TakeItem();
+                    }
+                    else
+                    {
+                        //TODO: signify that the cart is full
+                        Debug.Log("No daddy im already fully wully xS"); //certified michl game
+                    }
                 }
+                
             }
         }
     }
@@ -68,12 +103,24 @@ public class CartInventory : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.GetComponentInParent<ShelfScript>());
-        collidingShelves.Add(other.GetComponentInParent<ShelfScript>());
+        if (other.CompareTag("Shelf"))
+        {
+            collidingShelves.Add(other.GetComponentInParent<ShelfScript>());
+            Debug.Log("entered: colliding with "+collidingShelves.Count+" shelves");
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        collidingShelves.Remove(other.GetComponentInParent<ShelfScript>());
+        if (other.CompareTag("Shelf"))
+        { 
+            collidingShelves.Remove(other.GetComponentInParent<ShelfScript>());
+            Debug.Log("exited: colliding with "+collidingShelves.Count+" shelves");
+        }
+    }
+
+    public List<Item> GetInventory()
+    {
+        return new List<Item>(inventory);
     }
 }

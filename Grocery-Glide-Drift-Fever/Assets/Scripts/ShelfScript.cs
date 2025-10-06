@@ -28,12 +28,14 @@ public class ShelfScript : MonoBehaviour
     private Vector3 _upPoint;
     private Vector3 _downPoint;
     private bool _animationSmoothDampUpwards = true;
+    private MeshRenderer _coneMeshRenderer;
 
     [NonSerialized] public bool hasItem;
 
     private void Start()
     {
         if (item != null) InitializeShelfItem();
+        _coneMeshRenderer = cone.GetComponent<MeshRenderer>();
     }
 
     private void InitializeShelfItem()
@@ -74,7 +76,7 @@ public class ShelfScript : MonoBehaviour
     /// </summary>
     public void TakeItem()
     {
-        cone.SetActive(false);
+        _coneMeshRenderer.enabled = false;
         itemSpawn.SetActive(false);
         hasItem = false;
         StartCoroutine(Restock());
@@ -83,13 +85,9 @@ public class ShelfScript : MonoBehaviour
         // We only ever want to be able to restock if the item has been taken out of the shelf
         IEnumerator Restock()
         {
-            Debug.Log("Started Coroutine at timestamp : " + Time.time);
-
             yield return new WaitForSeconds(restockTime);
 
-            Debug.Log("Finished Coroutine at timestamp : " + Time.time);
-
-            cone.SetActive(true);
+            _coneMeshRenderer.enabled = true;
             itemSpawn.SetActive(true);
             hasItem = true;
         }

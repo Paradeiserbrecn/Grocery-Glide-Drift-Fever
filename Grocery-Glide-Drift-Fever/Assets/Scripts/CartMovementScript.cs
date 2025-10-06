@@ -20,26 +20,27 @@ public class CartMovement : MonoBehaviour
     private Rigidbody _cart;
     private BoxCollider _boxCollider;
     private CapsuleCollider _capsuleCollider;
+    private CartInventory _inventory;
 
     [Header("Properties")] [SerializeField]
     private float thrust = 100;
-
+    [SerializeField] private float maxSpeed = 100;
     [SerializeField] private float angular = 20;
     [SerializeField] private float physicalBaseWeight = 25;
     [SerializeField] private float weightMax = 100;
     [SerializeField] private float weight;
     [SerializeField] private float minDrift = 5;
+    [SerializeField] private float weightFactor = 1; //0 = a full cart gain no more drift value than an empty one
     [SerializeField] private float minBoost;
     [SerializeField] private float maxBoostStrength;
-    [SerializeField] private float emptyTippingThreshold;
-    [SerializeField] private float fullTippingThreshold;
     [SerializeField] private float fixedTippingThreshold;
     [SerializeField] private float maxTippingThresholdBoost;
     public bool IsDrifting { get; private set; } = false;
     public bool BoostReady { get; private set; } = false;
     public bool IsUpright { get; private set; } = false;
     private Vector3 _vel = Vector3.zero;
-    [Header("DEBUG")] public bool ragdoll = false;
+    [Header("DEBUG")] public bool DEBUG_canDropAll = true;
+    public bool ragdoll = false;
     [SerializeField] private bool _propUp = false;
     [SerializeField] private float _tippingThreshold;
     [SerializeField] private float _driftBoost = 1;
@@ -64,6 +65,8 @@ public class CartMovement : MonoBehaviour
         _boxCollider = GetComponent<BoxCollider>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _cart = GetComponent<Rigidbody>();
+        _inventory = GetComponent<CartInventory>();
+        
         _lastRot = transform.rotation;
         _cart.maxAngularVelocity = 50;
         _tippingThreshold = fixedTippingThreshold;
@@ -92,8 +95,6 @@ public class CartMovement : MonoBehaviour
             _driftBoost += (maxBoostStrength - _driftBoost) * _boostDecaySpeed * Time.deltaTime;
 
             HandleBoostParticles();
-
-            //Debug.Log(_cart.velocity.magnitude + ", " +_cart.angularVelocity.magnitude);
         }
 
         else if (Input.GetKeyDown("r"))
@@ -101,7 +102,6 @@ public class CartMovement : MonoBehaviour
             _propUpTargetPosition = transform.position + new Vector3(0, 1, 0);
             _cart.isKinematic = true;
             _propUp = true;
-            // _lastRot.y = 0;
             _lastRot.x = 0;
             _lastRot.z = 0;
         }
@@ -112,11 +112,13 @@ public class CartMovement : MonoBehaviour
         if (!ragdoll)
         {
             HandleInputAxisRaw();
+            ApplyDrag();
             return;
         }
         if (_propUp)
         {
-            if (Vector3.Distance(transform.position, _propUpTargetPosition) <= 0.02f &&
+            Debug.Log("Making upright B)");
+            if (Vector3.Distance(transform.position, _propUpTargetPosition) <= 0.04f &&
                 Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
             {
                 ActivateNormal();
@@ -133,6 +135,13 @@ public class CartMovement : MonoBehaviour
                 ActivateNormal();
             }
         }
+    }
+
+    private void ApplyDrag()
+    {
+        float drag = Mathf.Pow(thrust * 0.9f , _cart.velocity.magnitude / maxSpeed) -1;
+        //Debug.Log("speed: " + _cart.velocity.magnitude + ", Drag: " + drag );
+        _cart.AddForce(-_cart.velocity.normalized * (drag *  110f * Time.deltaTime));
     }
 
     private void HandleInputAxisRaw()
@@ -162,7 +171,7 @@ public class CartMovement : MonoBehaviour
 
     private float DriftValue()
     {
-        return Mathf.Abs(Vector3.Dot(transform.right, _cart.velocity) * ((1 + (weight / weightMax)) / 2));
+        return Mathf.Abs(Vector3.Dot(transform.right, _cart.velocity) * (1 + weightFactor * (weight / weightMax)) /2);
     }
 
     private void CheckTipping()
@@ -171,6 +180,7 @@ public class CartMovement : MonoBehaviour
         {
             _lastRot = transform.rotation;
             ActivateRagdoll();
+            //_inventory.DropAll();
         }
     }
 
@@ -253,6 +263,9 @@ public class CartMovement : MonoBehaviour
             wheel.StopSmoke();
             wheel.StopSpark();
         }
+        _inventory.DropAll(false);
+        
+        //TODO start minigame
     }
 
     private void AddDriftScore()
@@ -276,8 +289,8 @@ public class CartMovement : MonoBehaviour
                 _driftBoost = 1 + Mathf.Min(_driftScore * maxBoostStrength / 200, maxBoostStrength);
                 _tippingThreshold = fixedTippingThreshold +
                                     Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
-                Debug.Log("boost: tipping threshold: min of(" + (_driftScore * maxTippingThresholdBoost / 200) + ", " +
-                          maxTippingThresholdBoost + "), driftBoost: " + _driftBoost);
+                //Debug.Log("boost: tipping threshold: min of(" + (_driftScore * maxTippingThresholdBoost / 200) + ", " +
+                 //         maxTippingThresholdBoost + "), driftBoost: " + _driftBoost);
             }
 
             _driftScore = 0;
@@ -285,19 +298,19 @@ public class CartMovement : MonoBehaviour
         }
     }
 
-    public void AddWeight(int add)
+    public bool AddWeight(int add)
     {
-        if (weight + add > weightMax) return;
+        if (weight + add > weightMax) return false;
 
         weight += add;
         UpdateWeight();
+        return true;
     }
 
     private void UpdateWeight()
     {
+        //Debug.Log("tipping multiplier: " + (1 + weightFactor * (weight / weightMax)));
         _cart.mass = physicalBaseWeight + weight * 0.2f;
-        fixedTippingThreshold =
-            emptyTippingThreshold - ((emptyTippingThreshold - fullTippingThreshold) / weightMax * weight);
     }
 
     private void HandleBoostParticles()
