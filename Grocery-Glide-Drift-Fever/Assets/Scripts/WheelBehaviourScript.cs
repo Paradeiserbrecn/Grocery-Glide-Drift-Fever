@@ -19,7 +19,7 @@ public class WheelBehaviour : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if (new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > 0)
+		if (new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > 0.02)
 		{
 			transform.LookAt(transform.position + rb.velocity);
 			transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
@@ -31,7 +31,7 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySmoke()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 0.14f, LayerMask.GetMask("Environment")))
+		if (Physics.Raycast(transform.position, -transform.up, 0.15f, LayerMask.GetMask("Environment")))
 		{
 			smoke.Play();
 			streaks.emitting = true;
