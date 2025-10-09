@@ -54,7 +54,7 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySpark()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 0.14f,  LayerMask.GetMask("Environment")))
+		if (Physics.Raycast(transform.position, -transform.up, 0.15f,  LayerMask.GetMask("Environment")))
 		{
 			sparks.Play();
 		}
