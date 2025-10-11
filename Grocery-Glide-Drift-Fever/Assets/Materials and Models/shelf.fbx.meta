@@ -7,8 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material
-    second: {fileID: 2100000, guid: 903eb0d54d7bb6f49a51d8ea27b4a266, type: 2}
+      name: lips
+    second: {fileID: 2100000, guid: b182f75254f4712499f7926aa0dc9360, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phone body
+    second: {fileID: 2100000, guid: 5eca24e67e5da1c4084cc7d53322f4a9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shelf sign
+    second: {fileID: 2100000, guid: ae87ad0b7d222fb458dd4af26c46c277, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

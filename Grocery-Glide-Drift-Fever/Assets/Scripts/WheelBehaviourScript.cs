@@ -38,6 +38,7 @@ public class WheelBehaviour : MonoBehaviour
 		}
 		else
 		{
+			smoke.Stop();
 			streaks.emitting = false;
 		}
 	}
