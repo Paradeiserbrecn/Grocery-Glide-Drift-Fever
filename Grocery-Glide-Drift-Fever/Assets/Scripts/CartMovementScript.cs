@@ -20,7 +20,6 @@ public class CartMovement : MonoBehaviour
     private Rigidbody _cart;
     private BoxCollider _boxCollider;
     private CapsuleCollider _capsuleCollider;
-    private CartInventory _inventory;
 
     [Header("Properties")] [SerializeField]
     private float thrust = 100;
@@ -65,7 +64,6 @@ public class CartMovement : MonoBehaviour
         _boxCollider = GetComponent<BoxCollider>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _cart = GetComponent<Rigidbody>();
-        _inventory = GetComponent<CartInventory>();
         
         _lastRot = transform.rotation;
         _cart.maxAngularVelocity = 50;
@@ -79,6 +77,7 @@ public class CartMovement : MonoBehaviour
 
     private void Update()
     {
+        
         if (!ragdoll)
         {
             _driftValue = DriftValue();
@@ -96,6 +95,7 @@ public class CartMovement : MonoBehaviour
 
             HandleBoostParticles();
         }
+        
 
         else if (Input.GetKeyDown("r"))
         {
@@ -105,6 +105,7 @@ public class CartMovement : MonoBehaviour
             _lastRot.x = 0;
             _lastRot.z = 0;
         }
+        
     }
 
     private void FixedUpdate()
@@ -117,7 +118,7 @@ public class CartMovement : MonoBehaviour
         }
         if (_propUp)
         {
-            Debug.Log("Making upright B)");
+            //Debug.Log("Making upright B)");
             if (Vector3.Distance(transform.position, _propUpTargetPosition) <= 0.04f &&
                 Quaternion.Angle(transform.rotation, _lastRot) <= 4f)
             {
@@ -263,9 +264,9 @@ public class CartMovement : MonoBehaviour
             wheel.StopSmoke();
             wheel.StopSpark();
         }
-        _inventory.DropAll(false);
         
         //TODO start minigame
+        EventManager.InvokeDropAll(false);
     }
 
     private void AddDriftScore()

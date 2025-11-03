@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -21,6 +17,8 @@ public class ShoppingList : MonoBehaviour
     {
         _shoppingList = MakeRandomList(listLength, false);
         PopulateItems();
+        EventManager.ItemPickup += OnPickUp;
+        EventManager.DropAll += OnDropAll;
     }
 
 
@@ -136,10 +134,11 @@ public class ShoppingList : MonoBehaviour
         }
     }
 
-    //searches the dictionary for an instance of the item that is neither in the cart nor has been bought and updates it.
+    //searches the dictionary for an instance of the ListItem that is neither in the cart nor has been bought and updates it.
     //if it cant find one a new one is instanced
-    public void PickUp(Item item)
+    public void OnPickUp(Item item)
     {
+        LogItems(_items);
         if (_items.ContainsKey(item))
         {
             foreach (ListItem listItem in _items[item])
@@ -157,38 +156,59 @@ public class ShoppingList : MonoBehaviour
         StyleListItem(newListItem, item);
     }
 
-    public void Drop(Item item, bool buy)
+    //If buy searches for the first fitting ListItem in the cart and marks it as bought
+    //if not searches the last fitting ListItem in the cart and deletes it or marks it as not in the cart if it's on the shoppinglist
+    public void OnDrop(Item item, bool buy)
     {
-        if (_items.ContainsKey(item) &&  _items[item].Count > 0)
+        if (_items.ContainsKey(item) && _items[item].Count > 0)
         {
-            foreach (ListItem listItem in _items[item])
-            {
-                if (listItem.InCart)
+            ListItem bottomMostListItem = null;
+ 
+            for (int i = _items[item].Count - 1; i >= 0; i--)
+            { 
+                ListItem listItem = _items[item][i]; 
+                if (listItem.InCart) 
                 {
-                    if (buy &&  !listItem.Bought){ 
-                        listItem.Bought = true;
-                        
-                        //TODO: evaluate purchase 
-                    }
-                    
-                    if (listItem.InList || listItem.Bought)
+                    if (listItem.InList == buy) 
                     {
-                        listItem.InCart = false;
-                        StyleListItem(listItem, item);
-                    }
-                    else
-                    {
-                        Destroy(listItem.UIItemText.gameObject);
-                        _items[item].Remove(listItem);
-                    }
-                    return;
+                        bottomMostListItem = listItem; 
+                        if(!buy) {break;}
+                    } 
+                    if (bottomMostListItem == null) bottomMostListItem = listItem;
+                }
+            }
+            
+            if (bottomMostListItem != null)
+            {
+                if(buy){
+                    bottomMostListItem.Bought = true;
+                    //TODO: evaluate purchase
+                }
+
+                if (bottomMostListItem.InList || bottomMostListItem.Bought)
+                {
+                    bottomMostListItem.InCart = false;
+                    StyleListItem(bottomMostListItem, item);
+                }
+                else
+                {
+                    Destroy(bottomMostListItem.UIItemText.gameObject);
+                    _items[item].Remove(bottomMostListItem);
                 }
             }
         }
     }
     
-    public void BuyAll(CartInventory inventory)
+    
+
+    public void OnDropAll(bool buy)
     {
-        inventory.DropAll(true);
+        foreach (Item item in _items.Keys)
+        {
+            //foreach (ListItem listItem in _items[item])
+            //{
+                OnDrop(item, buy);
+            //}
+        }
     }
 }

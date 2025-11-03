@@ -7,7 +7,6 @@ public class Shop : MonoBehaviour
 {
     [SerializeField] private GameObject shelfGroup;
     private HashSet<Item> _existingItems;
-    private ShoppingList _shoppingList;
     void Start()
     {
         _existingItems = GatherItems();
