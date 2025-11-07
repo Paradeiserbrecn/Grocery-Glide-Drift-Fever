@@ -182,7 +182,10 @@ public class ShoppingList : MonoBehaviour
             {
                 if(buy){
                     bottomMostListItem.Bought = true;
-                    //TODO: evaluate purchase
+                    if (!bottomMostListItem.InList)
+                    {
+                        Globals.excessItems.Add(item);
+                    }
                 }
 
                 if (bottomMostListItem.InList || bottomMostListItem.Bought)
@@ -205,10 +208,10 @@ public class ShoppingList : MonoBehaviour
     {
         foreach (Item item in _items.Keys)
         {
-            //foreach (ListItem listItem in _items[item])
-            //{
+            foreach (ListItem listItem in _items[item])
+            {
                 OnDrop(item, buy);
-            //}
+            }
         }
     }
 }

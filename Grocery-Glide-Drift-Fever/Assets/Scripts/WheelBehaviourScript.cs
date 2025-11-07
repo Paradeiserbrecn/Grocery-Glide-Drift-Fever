@@ -8,7 +8,6 @@ public class WheelBehaviour : MonoBehaviour
 	private CartMovement _cartMovement;
 	[SerializeField] private ParticleSystem smoke, sparks;
 	[SerializeField] private TrailRenderer streaks;
-
 	private void Start()
 	{
 		_cartMovement = rb.GetComponent<CartMovement>();
@@ -16,7 +15,6 @@ public class WheelBehaviour : MonoBehaviour
 		sparks.Stop();
 		sparks.Clear();
 	}
-
 	private void FixedUpdate()
 	{
 		if (new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > 0)
@@ -26,12 +24,17 @@ public class WheelBehaviour : MonoBehaviour
 		}
 	}
 
+	public bool IsGrounded()
+	{
+		return Physics.Raycast(transform.position, -transform.up, 0.14f, LayerMask.GetMask("Environment"));
+	}
+
 	/// <summary>
 	/// Checks if the Wheel is grounded and if so, plays smoke particles
 	/// </summary>
 	public void PlaySmoke()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 0.14f, LayerMask.GetMask("Environment")))
+		if (IsGrounded())
 		{
 			smoke.Play();
 			streaks.emitting = true;
@@ -54,7 +57,7 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySpark()
 	{
-		if (Physics.Raycast(transform.position, -transform.up, 0.14f,  LayerMask.GetMask("Environment")))
+		if (IsGrounded())
 		{
 			sparks.Play();
 		}

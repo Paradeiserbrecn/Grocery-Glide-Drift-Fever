@@ -72,6 +72,16 @@ public class CartMovement : MonoBehaviour
         UpdateWeight();
     }
 
+    public bool IsGrounded()
+    {
+        bool  isGrounded = false;
+        foreach (WheelBehaviour wheel in wheels)
+        {
+            isGrounded = isGrounded || wheel.IsGrounded();
+        }
+        return isGrounded;
+    }
+
 
     private float _verticalAxis, _horizontalAxis;
 
