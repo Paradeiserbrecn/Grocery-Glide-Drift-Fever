@@ -15,7 +15,6 @@ public class CartInventory : MonoBehaviour
 
     private void Start()
     {
-        EventManager.ItemDrop += OnDropItem;
         EventManager.DropAll += OnDropAll;
     }
 

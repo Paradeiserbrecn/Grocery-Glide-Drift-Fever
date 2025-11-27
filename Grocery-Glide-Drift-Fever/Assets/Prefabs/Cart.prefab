@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2425831099661811083}
   - component: {fileID: 3881508230989324506}
   - component: {fileID: 3981849206203248135}
+  - component: {fileID: 8309754737604390831}
   - component: {fileID: 5112713721077343102}
   - component: {fileID: 6413699274488136689}
   - component: {fileID: 6486676647806277914}
-  - component: {fileID: 8309754737604390831}
   - component: {fileID: 7008426645689174205}
   m_Layer: 3
   m_Name: Cart
@@ -37,6 +37,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7313464813689454089}
   - {fileID: 8159152584431068054}
   - {fileID: 7732446031715475069}
   - {fileID: 4461452548858414786}
@@ -118,18 +119,19 @@ MonoBehaviour:
   - {fileID: 8112604444052285130}
   - {fileID: 8767519229300260440}
   - {fileID: 5800901698157655004}
-  thrust: 50
+  thrust: 75
+  maxSpeed: 16
   angular: 15
   physicalBaseWeight: 25
   weightMax: 100
   weight: 0
   minDrift: 3
+  weightFactor: 1
   minBoost: 70
   maxBoostStrength: 1
-  emptyTippingThreshold: 6
-  fullTippingThreshold: 4
   fixedTippingThreshold: 6
   maxTippingThresholdBoost: 3
+  DEBUG_canDropAll: 1
   ragdoll: 0
   _propUp: 0
   _tippingThreshold: 0
@@ -138,6 +140,20 @@ MonoBehaviour:
   _driftScore: 0
   _boostDecaySpeed: 0.6
   _tippingDecaySpeed: 0.3
+--- !u!114 &8309754737604390831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431080374522984759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1274379b359a07f47afede502e2c1afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cart: {fileID: 3981849206203248135}
+  itemRange: {fileID: 7008426645689174205}
 --- !u!65 &5112713721077343102
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -151,7 +167,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -172,7 +188,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -209,20 +225,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8309754737604390831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1431080374522984759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1274379b359a07f47afede502e2c1afb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cart: {fileID: 3981849206203248135}
-  itemRange: {fileID: 7008426645689174205}
 --- !u!136 &7008426645689174205
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -233,10 +235,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 127
+    m_Bits: 4294967295
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -5102,6 +5104,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.45, z: 0.114}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 390854302497003260}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7813399200100206344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7313464813689454089}
+  m_Layer: 0
+  m_Name: ScoreCounter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7313464813689454089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7813399200100206344}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.16466498, y: 0.56842554, z: 48.797504}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
