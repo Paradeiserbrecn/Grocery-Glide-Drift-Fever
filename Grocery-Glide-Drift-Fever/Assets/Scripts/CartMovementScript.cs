@@ -20,6 +20,7 @@ public class CartMovement : MonoBehaviour
     private Rigidbody _cart;
     private BoxCollider _boxCollider;
     private CapsuleCollider _capsuleCollider;
+    private ScoreCounter _scoreCounter;
 
     [Header("Properties")] [SerializeField]
     private float thrust = 100;
@@ -31,10 +32,15 @@ public class CartMovement : MonoBehaviour
     [SerializeField] private float minDrift = 5;
     [SerializeField] private float weightFactor = 1; //0 = a full cart gain no more drift value than an empty one
     [SerializeField] private float minBoost;
+    [SerializeField] private float minScoreCount; //score will only be counted once minDriftScore drift boost has accumulated
+    [SerializeField] private double minAirtime; //score will only be counted once minAirtime has been reached
+    private int _colliderTouching = 0;
+    [SerializeField] private float airtimeMultiplier = 100;
     [SerializeField] private float maxBoostStrength;
     [SerializeField] private float fixedTippingThreshold;
     [SerializeField] private float maxTippingThresholdBoost;
     public bool IsDrifting { get; private set; } = false;
+    public bool IsGrounded { get; private set; } = false;
     public bool BoostReady { get; private set; } = false;
     public bool IsUpright { get; private set; } = false;
     private Vector3 _vel = Vector3.zero;
@@ -45,6 +51,7 @@ public class CartMovement : MonoBehaviour
     [SerializeField] private float _driftBoost = 1;
     [SerializeField] private float _driftValue;
     [SerializeField] private float _driftScore;
+    private double _airtime;
     [SerializeField] private float _boostDecaySpeed;
     [SerializeField] private float _tippingDecaySpeed;
 
@@ -64,6 +71,7 @@ public class CartMovement : MonoBehaviour
         _boxCollider = GetComponent<BoxCollider>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _cart = GetComponent<Rigidbody>();
+        _scoreCounter = GetComponent<ScoreCounter>();
         
         _lastRot = transform.rotation;
         _cart.maxAngularVelocity = 50;
@@ -72,14 +80,47 @@ public class CartMovement : MonoBehaviour
         UpdateWeight();
     }
 
-    public bool IsGrounded()
+    public void CheckGrounded()
     {
-        bool  isGrounded = false;
+        /*bool  isGrounded = false;
         foreach (WheelBehaviour wheel in wheels)
         {
             isGrounded = isGrounded || wheel.IsGrounded();
         }
-        return isGrounded;
+        IsGrounded = isGrounded || _colliderTouching > 0;
+        */
+        IsGrounded = _colliderTouching > 0;
+        
+        if (!IsGrounded)
+        {
+            DetectFloor();
+            if (!_floorDetected)
+            {
+                _airtime += Time.deltaTime;
+                if (_airtime > minAirtime)
+                {
+                    _scoreCounter.AirtimeScoreUpdated((int)(_airtime * airtimeMultiplier));
+                }
+            }
+        }
+        else
+        {
+            if (_airtime > 0)
+            {
+                _scoreCounter.AddAirtimeScoreToSum((int)(_airtime * airtimeMultiplier));
+            }
+            _airtime = 0;
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        _colliderTouching++;
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        _colliderTouching--;
     }
 
 
@@ -96,6 +137,7 @@ public class CartMovement : MonoBehaviour
             CheckUpright();
             CheckTipping();
             CheckCrashed();
+            CheckGrounded();
             AddDriftScore();
 
 
@@ -227,29 +269,34 @@ public class CartMovement : MonoBehaviour
     {
         if (!IsUpright)
         {
-            _floorDetected = Physics.Raycast(_raycastOrigin.position, _raycastOrigin.right, 0.45f,
-                LayerMask.GetMask("Environment"));
-            Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.right * 0.45f, Color.red);
-            _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, -_raycastOrigin.right, 0.45f,
-                LayerMask.GetMask("Environment"));
-            Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + -_raycastOrigin.right * 0.45f, Color.red);
-            _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, 0.85f,
-                LayerMask.GetMask("Environment"));
-            Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.forward * 0.85f,
-                Color.red);
-            _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, -_raycastOrigin.forward, 0.85f,
-                LayerMask.GetMask("Environment"));
-            Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + -_raycastOrigin.forward * 0.85f,
-                Color.red);
-            _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, _raycastOrigin.up, 0.45f,
-                LayerMask.GetMask("Environment"));
-            Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.up * 0.45f, Color.red);
+            DetectFloor();
             if (_floorDetected)
             {
                 ActivateRagdoll();
                 Debug.Log("you crashed");
             }
         }
+    }
+
+    private void DetectFloor()
+    {
+        _floorDetected = Physics.Raycast(_raycastOrigin.position, _raycastOrigin.right, 0.45f,
+            LayerMask.GetMask("Environment"));
+        Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.right * 0.45f, Color.red);
+        _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, -_raycastOrigin.right, 0.45f,
+            LayerMask.GetMask("Environment"));
+        Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + -_raycastOrigin.right * 0.45f, Color.red);
+        _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, _raycastOrigin.forward, 0.85f,
+            LayerMask.GetMask("Environment"));
+        Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.forward * 0.85f,
+            Color.red);
+        _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, -_raycastOrigin.forward, 0.85f,
+            LayerMask.GetMask("Environment"));
+        Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + -_raycastOrigin.forward * 0.85f,
+            Color.red);
+        _floorDetected = _floorDetected || Physics.Raycast(_raycastOrigin.position, _raycastOrigin.up, 0.45f,
+            LayerMask.GetMask("Environment"));
+        Debug.DrawLine(_raycastOrigin.position, _raycastOrigin.position + _raycastOrigin.up * 0.45f, Color.red);
     }
 
     private void ActivateNormal()
@@ -268,6 +315,8 @@ public class CartMovement : MonoBehaviour
         _capsuleCollider.material = ragdollMaterial;
         IsDrifting = false;
         BoostReady = false;
+        _airtime = 0;
+        _driftScore = 0;
         _driftBoost = 1;
         foreach (WheelBehaviour wheel in wheels)
         {
@@ -284,6 +333,13 @@ public class CartMovement : MonoBehaviour
         if (IsDrifting)
         {
             _driftScore += _driftValue * Time.deltaTime * 10;
+            
+                        
+            if (_driftScore > minScoreCount)
+            {
+                _scoreCounter.DriftScoreUpdated((int)_driftScore);
+            }
+            
             if (_driftScore > minBoost)
             {
                 BoostReady = true;
@@ -300,10 +356,9 @@ public class CartMovement : MonoBehaviour
                 _driftBoost = 1 + Mathf.Min(_driftScore * maxBoostStrength / 200, maxBoostStrength);
                 _tippingThreshold = fixedTippingThreshold +
                                     Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
-                //Debug.Log("boost: tipping threshold: min of(" + (_driftScore * maxTippingThresholdBoost / 200) + ", " +
-                 //         maxTippingThresholdBoost + "), driftBoost: " + _driftBoost);
             }
 
+            _scoreCounter.AddDriftScoreToSum((int)_driftScore);
             _driftScore = 0;
             BoostReady = false;
         }

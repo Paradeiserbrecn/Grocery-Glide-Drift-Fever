@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6413699274488136689}
   - component: {fileID: 6486676647806277914}
   - component: {fileID: 7008426645689174205}
+  - component: {fileID: 1368324342823005981}
   m_Layer: 3
   m_Name: Cart
   m_TagString: Player
@@ -37,7 +38,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7313464813689454089}
   - {fileID: 8159152584431068054}
   - {fileID: 7732446031715475069}
   - {fileID: 4461452548858414786}
@@ -128,6 +128,9 @@ MonoBehaviour:
   minDrift: 3
   weightFactor: 1
   minBoost: 70
+  minScoreCount: 0
+  minAirtime: 0.5
+  airtimeMultiplier: 100
   maxBoostStrength: 1
   fixedTippingThreshold: 6
   maxTippingThresholdBoost: 3
@@ -248,6 +251,19 @@ CapsuleCollider:
   m_Height: 1.93
   m_Direction: 2
   m_Center: {x: 0, y: 0.47, z: 0.15}
+--- !u!114 &1368324342823005981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431080374522984759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 125af9414c63ce24997dd32ebdc01859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  driftScoreTextPrefab: {fileID: 791790468679878271, guid: 1c304ddcdf5a04348afa89c4ba893c86, type: 3}
 --- !u!1 &3050232675890393735
 GameObject:
   m_ObjectHideFlags: 0
@@ -5104,37 +5120,6 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.45, z: 0.114}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 390854302497003260}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7813399200100206344
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7313464813689454089}
-  m_Layer: 0
-  m_Name: ScoreCounter
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7313464813689454089
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7813399200100206344}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.16466498, y: 0.56842554, z: 48.797504}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
