@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,14 @@ using TMPro;
 public class ScoreCounter : MonoBehaviour
 {
 
-    private bool _driftCounterActive = false;
-    private bool _airtimeCounterActive = false;
-    private ScoreTextWrapper _driftScoreTextWrapper;
-    private ScoreTextWrapper _airtimeTextWrapper;
+    private bool _counterActive = false;
+    private ScoreTextWrapper _scoreTextWrapper;
     private ScoreSum _scoreSum;
     [SerializeField] private GameObject driftScoreTextPrefab;
+
+    private Vector3 _targetPosition;
+    
+    public enum ScoreType{AirTime, Drift}
 
 
 
@@ -24,54 +27,43 @@ public class ScoreCounter : MonoBehaviour
         }
     }
 
-    public void DriftScoreUpdated(int score)
+    public void ScoreUpdated(int score)
     {
-        if (!_driftCounterActive)
+        if (!_counterActive)
         {
-            _driftScoreTextWrapper = Instantiate(driftScoreTextPrefab, transform).GetComponent<ScoreTextWrapper>();
-            _driftCounterActive = true;
+            _scoreTextWrapper = Instantiate(driftScoreTextPrefab, transform).GetComponent<ScoreTextWrapper>();
+            _counterActive = true;
         }
-        _driftScoreTextWrapper.UpdateText(score);
-    }
-    
-    public void AirtimeScoreUpdated(int airtime)
-    {
-        if (!_airtimeCounterActive)
-        {
-            _airtimeTextWrapper = Instantiate(driftScoreTextPrefab, transform).GetComponent<ScoreTextWrapper>(); 
-            _airtimeCounterActive = true;
-        }
-        _airtimeTextWrapper.UpdateText(airtime);
+        _scoreTextWrapper.UpdateText(score);
     }
 
-    public void AddDriftScoreToSum(int score)
+    public void ScoreToSum(int score, ScoreType type)
     {
-        if (_driftCounterActive)
+        if (_counterActive)
         {
-            Debug.Log("score added");
+            Debug.Log(type + " score added");
             _scoreSum.AddScore(score);
-            Destroy(_driftScoreTextWrapper.gameObject);
-            _driftCounterActive = false;
+            Destroy(_scoreTextWrapper.gameObject);
+            _counterActive = false;
         }
     }
 
-    public void AddAirtimeScoreToSum(int airtime)
+    public void RemoveCounter(int score)
     {
-        if (_airtimeCounterActive)
+        if (_counterActive)
         {
-            Debug.Log("airtime added");
-            _scoreSum.AddScore(airtime);
-            Destroy(_airtimeTextWrapper.gameObject);
-            _airtimeCounterActive = false;
+            Destroy(_scoreTextWrapper.gameObject);
+            _counterActive = false;
         }
     }
 
-    public void RemoveAirtimeCounter(int score)
+    private void Update()
     {
-        if (_airtimeCounterActive)
-        {
-            Destroy(_airtimeTextWrapper.gameObject);
-            _airtimeCounterActive = false;
-        }
+        
+    }
+
+    private void MoveCounter()
+    {
+        
     }
 }

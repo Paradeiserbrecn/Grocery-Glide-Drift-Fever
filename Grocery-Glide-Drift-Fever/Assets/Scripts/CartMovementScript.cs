@@ -52,6 +52,7 @@ public class CartMovement : MonoBehaviour
     [SerializeField] private float _driftValue;
     [SerializeField] private float _driftScore;
     private double _airtime;
+    private float _driftTime;
     [SerializeField] private float _boostDecaySpeed;
     [SerializeField] private float _tippingDecaySpeed;
 
@@ -99,7 +100,8 @@ public class CartMovement : MonoBehaviour
                 _airtime += Time.deltaTime;
                 if (_airtime > minAirtime)
                 {
-                    _scoreCounter.AirtimeScoreUpdated((int)(_airtime * airtimeMultiplier));
+                    Debug.Log("trying to open counter");
+                    _scoreCounter.ScoreUpdated((int)(_airtime * airtimeMultiplier));
                 }
             }
         }
@@ -107,7 +109,7 @@ public class CartMovement : MonoBehaviour
         {
             if (_airtime > 0)
             {
-                _scoreCounter.AddAirtimeScoreToSum((int)(_airtime * airtimeMultiplier));
+                _scoreCounter.ScoreToSum((int)(_airtime * airtimeMultiplier), ScoreCounter.ScoreType.AirTime);
             }
             _airtime = 0;
         }
@@ -239,7 +241,7 @@ public class CartMovement : MonoBehaviour
 
     private bool CheckIsDrifting()
     {
-        if (!ragdoll && _driftValue > minDrift)
+        if (!ragdoll && _driftValue > minDrift && IsGrounded)
         {
             foreach (WheelBehaviour wheel in wheels)
             {
@@ -332,12 +334,13 @@ public class CartMovement : MonoBehaviour
     {
         if (IsDrifting)
         {
-            _driftScore += _driftValue * Time.deltaTime * 10;
+            _driftTime += Time.deltaTime;
+            _driftScore += _driftValue * Time.deltaTime * 10 * (0.5f + _driftTime);
             
                         
             if (_driftScore > minScoreCount)
             {
-                _scoreCounter.DriftScoreUpdated((int)_driftScore);
+                _scoreCounter.ScoreUpdated((int)_driftScore);
             }
             
             if (_driftScore > minBoost)
@@ -358,7 +361,8 @@ public class CartMovement : MonoBehaviour
                                     Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
             }
 
-            _scoreCounter.AddDriftScoreToSum((int)_driftScore);
+            if(IsGrounded) _scoreCounter.ScoreToSum((int)_driftScore, ScoreCounter.ScoreType.Drift);
+            _driftTime = 0;
             _driftScore = 0;
             BoostReady = false;
         }

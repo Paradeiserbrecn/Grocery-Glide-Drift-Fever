@@ -7,8 +7,6 @@ using TMPro;
 public class ScoreTextWrapper : MonoBehaviour
 {
     [SerializeField]private TMP_Text _driftScoreText;
-    private List<char> digits = new List<char>(){'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    private StringBuilder text = new StringBuilder();
 
     private void Start()
     {
@@ -17,15 +15,8 @@ public class ScoreTextWrapper : MonoBehaviour
 
     public void UpdateText(int score)
     {
-        int processedScore = score;
-        text.Clear();
-        while (processedScore > 0)
-        {
-            text.Insert(0,processedScore%10);
-            processedScore /= 10;
-        }
 
-        _driftScoreText.text = text.ToString();
+        _driftScoreText.text = score.ToString();
     }
 
     public string GetText()
