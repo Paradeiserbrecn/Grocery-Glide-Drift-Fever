@@ -8,11 +8,6 @@ public class ScoreTextWrapper : MonoBehaviour
 {
     [SerializeField]private TMP_Text _driftScoreText;
 
-    private void Start()
-    {
-        _driftScoreText = GetComponent<TMP_Text>();
-    }
-
     public void UpdateText(int score)
     {
 

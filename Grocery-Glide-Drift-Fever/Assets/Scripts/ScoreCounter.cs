@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class ScoreCounter : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class ScoreCounter : MonoBehaviour
     [SerializeField] private GameObject driftScoreTextPrefab;
 
     private Vector3 _targetPosition;
+    private List<ScoreTextWrapper> _movingTextWrappers = new List<ScoreTextWrapper>();
+    private bool _moving;
     
     public enum ScoreType{AirTime, Drift}
 
@@ -56,14 +59,24 @@ public class ScoreCounter : MonoBehaviour
             _counterActive = false;
         }
     }
-
+/*
     private void Update()
     {
-        
+        if (_moving)
+        {
+            MoveCounters();
+        }
     }
 
-    private void MoveCounter()
+    private void MoveCounters()
     {
-        
+        foreach (ScoreTextWrapper wrapper in _movingTextWrappers)
+        {
+            Vector3.Lerp(wrapper.transform.position, , 1f);
+            wrapper.SetPos(Vector3.zero);
+        }
     }
+
+    private void 
+*/
 }
