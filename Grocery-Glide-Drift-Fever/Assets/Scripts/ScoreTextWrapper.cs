@@ -7,10 +7,11 @@ using TMPro;
 public class ScoreTextWrapper : MonoBehaviour
 {
     [SerializeField]private TMP_Text _driftScoreText;
+    public int value;
+    public float moveTime = 0f;
 
     public void UpdateText(int score)
     {
-
         _driftScoreText.text = score.ToString();
     }
 
