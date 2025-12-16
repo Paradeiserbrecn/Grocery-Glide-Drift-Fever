@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6413699274488136689}
   - component: {fileID: 6486676647806277914}
   - component: {fileID: 7008426645689174205}
+  - component: {fileID: 1368324342823005981}
   m_Layer: 3
   m_Name: Cart
   m_TagString: Player
@@ -127,7 +128,7 @@ MonoBehaviour:
   minDrift: 3
   weightFactor: 1
   minBoost: 70
-  minScoreCount: 30
+  minScoreCount: 0
   minAirtime: 0.5
   airtimeMultiplier: 100
   maxBoostStrength: 1
@@ -250,6 +251,19 @@ CapsuleCollider:
   m_Height: 1.93
   m_Direction: 2
   m_Center: {x: 0, y: 0.47, z: 0.15}
+--- !u!114 &1368324342823005981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431080374522984759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 125af9414c63ce24997dd32ebdc01859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  driftScoreTextPrefab: {fileID: 791790468679878271, guid: 1c304ddcdf5a04348afa89c4ba893c86, type: 3}
 --- !u!1 &3050232675890393735
 GameObject:
   m_ObjectHideFlags: 0

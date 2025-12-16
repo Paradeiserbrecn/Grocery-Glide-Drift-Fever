@@ -20,7 +20,7 @@ public class CartMovement : MonoBehaviour
     private Rigidbody _cart;
     private BoxCollider _boxCollider;
     private CapsuleCollider _capsuleCollider;
-    //private ScoreCounter _scoreCounter;
+    private ScoreCounter _scoreCounter;
 
     [Header("Properties")] [SerializeField]
     private float thrust = 100;
@@ -72,6 +72,7 @@ public class CartMovement : MonoBehaviour
         _boxCollider = GetComponent<BoxCollider>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _cart = GetComponent<Rigidbody>();
+        _scoreCounter = GetComponent<ScoreCounter>();
         
         _lastRot = transform.rotation;
         _cart.maxAngularVelocity = 50;
@@ -100,7 +101,7 @@ public class CartMovement : MonoBehaviour
                 if (_airtime > minAirtime)
                 {
                     Debug.Log("trying to open counter");
-                    //_scoreCounter.ScoreUpdated((int)(_airtime * airtimeMultiplier));
+                    _scoreCounter.ScoreUpdated((int)(_airtime * airtimeMultiplier));
                 }
             }
         }
@@ -108,7 +109,7 @@ public class CartMovement : MonoBehaviour
         {
             if (_airtime > 0)
             {
-                //_scoreCounter.ScoreToSum((int)(_airtime * airtimeMultiplier), ScoreCounter.ScoreType.AirTime);
+                _scoreCounter.ScoreToSum((int)(_airtime * airtimeMultiplier), ScoreCounter.ScoreType.AirTime);
             }
             _airtime = 0;
         }
@@ -339,7 +340,7 @@ public class CartMovement : MonoBehaviour
                         
             if (_driftScore > minScoreCount)
             {
-                //_scoreCounter.ScoreUpdated((int)_driftScore);
+                _scoreCounter.ScoreUpdated((int)_driftScore);
             }
             
             if (_driftScore > minBoost)
@@ -360,7 +361,7 @@ public class CartMovement : MonoBehaviour
                                     Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
             }
 
-            if(IsGrounded) //_scoreCounter.ScoreToSum((int)_driftScore, ScoreCounter.ScoreType.Drift);
+            if(IsGrounded) _scoreCounter.ScoreToSum((int)_driftScore, ScoreCounter.ScoreType.Drift);
             _driftTime = 0;
             _driftScore = 0;
             BoostReady = false;
