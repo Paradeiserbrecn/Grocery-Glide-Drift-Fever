@@ -109,7 +109,7 @@ public class CartMovement : MonoBehaviour
         {
             if (_airtime > 0)
             {
-                _scoreCounter.ScoreToSum((int)(_airtime * airtimeMultiplier), ScoreCounter.ScoreType.AirTime);
+                _scoreCounter.StopCounter((int)(_airtime * airtimeMultiplier), ScoreCounter.ScoreType.AirTime);
             }
             _airtime = 0;
         }
@@ -361,7 +361,7 @@ public class CartMovement : MonoBehaviour
                                     Mathf.Min(_driftScore * maxTippingThresholdBoost / 200, maxTippingThresholdBoost);
             }
 
-            if(IsGrounded) _scoreCounter.ScoreToSum((int)_driftScore, ScoreCounter.ScoreType.Drift);
+            if(IsGrounded) _scoreCounter.StopCounter((int)_driftScore, ScoreCounter.ScoreType.Drift);
             _driftTime = 0;
             _driftScore = 0;
             BoostReady = false;

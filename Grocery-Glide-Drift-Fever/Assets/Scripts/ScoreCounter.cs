@@ -12,6 +12,10 @@ public class ScoreCounter : MonoBehaviour
     private ScoreTextWrapper _scoreTextWrapper;
     private ScoreSum _scoreSum;
     [SerializeField] private GameObject driftScoreTextPrefab;
+    [SerializeField] private Transform scoreSpawnPoint;
+    [SerializeField] private Transform scoreSumTransform;
+    private Vector3  _scoreSumPosition;
+    private Camera _camera;
 
     private Vector3 _targetPosition;
     private List<ScoreTextWrapper> _movingTextWrappers = new List<ScoreTextWrapper>();
@@ -28,39 +32,45 @@ public class ScoreCounter : MonoBehaviour
         {
             Debug.LogError("ScoreSum not found");
         }
+        
+        _camera = Camera.main;
+        _scoreSumPosition = scoreSumTransform.position;
     }
 
     public void ScoreUpdated(int score)
     {
         if (!_counterActive)
         {
-            _scoreTextWrapper = Instantiate(driftScoreTextPrefab, transform).GetComponent<ScoreTextWrapper>();
+            _scoreTextWrapper = Instantiate(driftScoreTextPrefab, scoreSpawnPoint).GetComponent<ScoreTextWrapper>();
             _counterActive = true;
         }
         _scoreTextWrapper.UpdateText(score);
     }
 
-    public void ScoreToSum(int score, ScoreType type)
+    public void StopCounter(int score, ScoreType type)
     {
         if (_counterActive)
         {
-            Debug.Log(type + " score added");
-            _scoreSum.AddScore(score);
-            Destroy(_scoreTextWrapper.gameObject);
+            _scoreTextWrapper.score = score;
+            _scoreTextWrapper.scoreType = type;
+            _scoreTextWrapper.transform.SetParent(_camera.transform);
+            _movingTextWrappers.Add(_scoreTextWrapper);
+            _scoreTextWrapper = null;
             _counterActive = false;
+            _moving = true;
         }
     }
 
-    public void RemoveCounter(int score)
+    private void ScoreToSum(ScoreTextWrapper scoreText)
     {
-        if (_counterActive)
-        {
-            Destroy(_scoreTextWrapper.gameObject);
-            _counterActive = false;
-        }
+        Debug.Log(scoreText.scoreType + " score added");
+        _scoreSum.AddScore(scoreText.score);
+        _movingTextWrappers.Remove(scoreText);
+        Destroy(scoreText);
     }
-/*
-    private void Update()
+    
+    
+    private void FixedUpdate()
     {
         if (_moving)
         {
@@ -70,13 +80,20 @@ public class ScoreCounter : MonoBehaviour
 
     private void MoveCounters()
     {
+        //_targetPosition = _camera.ScreenToWorldPoint(new Vector3(0, Screen.height, 10));
+        _targetPosition = _camera.ScreenToWorldPoint(new Vector3(_scoreSumPosition.x, _scoreSumPosition.y ,10f));
+        
+        
+        //Vector3 mousepos = Input.mousePosition;
+        //_targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousepos.x, mousepos.y, 10f));
+        
+        
+        Debug.Log(_camera.transform.position +",  " + _targetPosition);
         foreach (ScoreTextWrapper wrapper in _movingTextWrappers)
         {
-            Vector3.Lerp(wrapper.transform.position, , 1f);
-            wrapper.SetPos(Vector3.zero);
+            wrapper.interpolate += Time.deltaTime;
+            wrapper.transform.position = Vector3.Lerp(scoreSpawnPoint.position, _targetPosition, wrapper.interpolate);
+            
         }
     }
-
-    private void 
-*/
 }

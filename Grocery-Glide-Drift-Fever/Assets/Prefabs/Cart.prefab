@@ -46,6 +46,7 @@ Transform:
   - {fileID: 4297103362177549240}
   - {fileID: 3646752649557973802}
   - {fileID: 1997156373391120046}
+  - {fileID: 1658334821681210534}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2425831099661811083
@@ -264,6 +265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   driftScoreTextPrefab: {fileID: 791790468679878271, guid: 1c304ddcdf5a04348afa89c4ba893c86, type: 3}
+  scoreSpawnPoint: {fileID: 1658334821681210534}
 --- !u!1 &3050232675890393735
 GameObject:
   m_ObjectHideFlags: 0
@@ -5094,6 +5096,37 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &4888203775053490123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1658334821681210534}
+  m_Layer: 0
+  m_Name: ScoreSpwanPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1658334821681210534
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4888203775053490123}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0082249, y: 1.154, z: -0.465}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 390854302497003260}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6433122124541829572
 GameObject:
   m_ObjectHideFlags: 0

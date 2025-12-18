@@ -1,16 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using TMPro;
 
 public class ScoreTextWrapper : MonoBehaviour
 {
     [SerializeField]private TMP_Text _driftScoreText;
+    public int score;
+    public ScoreCounter.ScoreType scoreType;
+    public float interpolate;
 
     public void UpdateText(int score)
     {
-
         _driftScoreText.text = score.ToString();
     }
 

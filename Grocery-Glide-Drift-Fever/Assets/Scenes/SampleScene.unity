@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -628,6 +628,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1368324342823005981, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 963194227}
+    - target: {fileID: 1368324342823005981, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
+      propertyPath: scoreSumTransform
+      value: 
+      objectReference: {fileID: 1997227901}
     - target: {fileID: 1431080374522984759, guid: 7edaa01f9fb3c77429ba98c71a58f5ec, type: 3}
       propertyPath: m_Name
       value: Cart
@@ -3404,6 +3412,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _driftScoreText: {fileID: 1997227902}
+  score: 0
+  scoreType: 0
+  interpolate: 0
 --- !u!1 &2000090613
 GameObject:
   m_ObjectHideFlags: 0
