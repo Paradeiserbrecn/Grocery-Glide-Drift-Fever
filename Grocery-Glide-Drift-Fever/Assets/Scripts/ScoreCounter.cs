@@ -66,7 +66,8 @@ public class ScoreCounter : MonoBehaviour
         Debug.Log(scoreText.scoreType + " score added");
         _scoreSum.AddScore(scoreText.score);
         _movingTextWrappers.Remove(scoreText);
-        Destroy(scoreText);
+        Destroy(scoreText.gameObject);
+        if(_movingTextWrappers.Count == 0) _moving = false;
     }
     
     
@@ -80,20 +81,26 @@ public class ScoreCounter : MonoBehaviour
 
     private void MoveCounters()
     {
-        //_targetPosition = _camera.ScreenToWorldPoint(new Vector3(0, Screen.height, 10));
-        _targetPosition = _camera.ScreenToWorldPoint(new Vector3(_scoreSumPosition.x, _scoreSumPosition.y ,10f));
-        
-        
-        //Vector3 mousepos = Input.mousePosition;
-        //_targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousepos.x, mousepos.y, 10f));
-        
+        _targetPosition = _camera.ScreenToWorldPoint(new Vector3(_scoreSumPosition.x, _scoreSumPosition.y ,1f));
         
         Debug.Log(_camera.transform.position +",  " + _targetPosition);
-        foreach (ScoreTextWrapper wrapper in _movingTextWrappers)
+        
+        int idx = 0;
+        //foreach (ScoreTextWrapper wrapper in _movingTextWrappers)
+        while(idx <  _movingTextWrappers.Count)
         {
-            wrapper.interpolate += Time.deltaTime;
-            wrapper.transform.position = Vector3.Lerp(scoreSpawnPoint.position, _targetPosition, wrapper.interpolate);
+            ScoreTextWrapper wrapper = _movingTextWrappers[idx];
             
+            wrapper.SetPos(Vector3.MoveTowards(wrapper.transform.position, _targetPosition, 0.2f));
+            wrapper.transform.localScale = wrapper.transform.localScale * 0.95f;
+            
+            if (Vector3.Distance(wrapper.transform.position, _targetPosition) < 0.15f)
+            {
+                ScoreToSum(wrapper);
+                continue;
+            }
+
+            idx++;
         }
     }
 }

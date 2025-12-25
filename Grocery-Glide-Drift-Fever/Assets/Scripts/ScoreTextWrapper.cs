@@ -6,7 +6,6 @@ public class ScoreTextWrapper : MonoBehaviour
     [SerializeField]private TMP_Text _driftScoreText;
     public int score;
     public ScoreCounter.ScoreType scoreType;
-    public float interpolate;
 
     public void UpdateText(int score)
     {
