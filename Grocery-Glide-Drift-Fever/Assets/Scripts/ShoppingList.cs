@@ -6,212 +6,128 @@ using Random = UnityEngine.Random;
 public class ShoppingList : MonoBehaviour
 {
     [SerializeField] private Shop shop;
-    private Dictionary<Item, int> _shoppingList = new Dictionary<Item, int>();
-    private Dictionary<Item,List<ListItem>> _items = new Dictionary<Item,List<ListItem>>();
+    private Dictionary<Item, int> _shoppingList;
+    private Dictionary<Item, int> _cartCount;
+    private Dictionary<Item, int> _boughtCount;
+    
     [SerializeField] private GameObject listItemPrefab;
+    private Dictionary<Item, UIListItemWrapper> _listItems = new Dictionary<Item, UIListItemWrapper>();
+    
     
     [Header("DEBUG")]
     [SerializeField]private int listLength = 3;
 
     private void Start()
     {
-        _shoppingList = MakeRandomList(listLength, false);
-        PopulateItems();
+        List<Item> existingItems = shop.getExistingItems();
+        _shoppingList = RandomShoppingListValues(listLength, false);
+        _cartCount = InitiateDictionary(existingItems);
+        _boughtCount = InitiateDictionary(existingItems);
+        
+        InitiateUI();
         EventManager.ItemPickup += OnPickUp;
-        EventManager.DropAll += OnDropAll;
+        EventManager.ItemDrop += OnDrop;
+    }
+
+    private void LogDict<T>(Dictionary<Item, T> dict)
+    {
+        Debug.Log("logging Dict:");
+        foreach (var kvp in dict)
+        {
+            Debug.Log($"{kvp.Key.name} : {kvp.Value}");
+        }
+    }
+
+    
+
+    private Dictionary<Item, int> InitiateDictionary(List<Item> existingItems)
+    {
+        var dict = new Dictionary<Item, int>();
+        foreach (Item item in existingItems)
+        {
+            dict[item] = 0;
+        }
+        return dict;
     }
 
 
-    private Dictionary<Item, int> MakeRandomList(int length, bool noDuplicates)
+    private Dictionary<Item, int> RandomShoppingListValues(int length, bool noDuplicates)
     {
-        Dictionary<Item,int> dict = new Dictionary<Item,int>();
-        List<Item> remaining = shop.getExistingItems();
+        List<Item> items = shop.getExistingItems();
+        Dictionary<Item, int> dict = InitiateDictionary(items);
+        
         for (int i = 0; i < length; i++)
         {
-            if (remaining.Count < 1)
+            if (items.Count < 1)
             {
                 Debug.Log("Not enough distinct items for shopping list of " + length + " length.");
                 break;
             }
             
-            int idx = Random.Range(0, remaining.Count);
-            if (!dict.ContainsKey(remaining[idx]))
-            {
-                dict[remaining[idx]] = 0;
-            }
-            dict[remaining[idx]] += 1;
-            if(noDuplicates) remaining.RemoveAt(idx);
+            int idx = Random.Range(0, items.Count);
+            
+            dict[items[idx]] += 1;
+            if(noDuplicates) items.RemoveAt(idx);
         }
         return dict;
     }
 
-    private void LogShoppingDictionary(Dictionary<Item,int> dict)
+    private void StyleUI(Item item)
     {
-        String text = "Dict:= ";
-        foreach (Item item in dict.Keys)
-        {
-            text += (item.ItemName + ": " + dict[item] + ",  ");
-        }
-        Debug.Log(text);
-    }
-    
-    private void LogItems(Dictionary<Item,List<ListItem>> dict)
-    {
-        String text = "Dict:\n";
-        foreach (Item item in dict.Keys)
-        {
-            foreach (ListItem listitem in dict[item])
-            {
-                text += (item.ItemName + ": " + listitem + "\n");
-            }
-        }
-        Debug.Log(text);
-    }
-
-    private void PopulateItems()
-    {
-        foreach (Item item in _shoppingList.Keys)
-        {
-            for (int i = 0; i < _shoppingList[item]; i++)
-            {
-                StyleListItem(AddItem(item), item);
-            }
-        }
-    }
-
-    private ListItem AddItem(Item item)
-    {
-        GameObject listItemGameObject = Instantiate(listItemPrefab,this.transform);
-        UIListItemWrapper listItemText = listItemGameObject.GetComponent<UIListItemWrapper>();
-        ListItem newItem = new ListItem(listItemText);
+        UIListItemWrapper listItem = _listItems[item];
+        int stillNeeded = _shoppingList[item] - _boughtCount[item];
         
-        listItemText.SetText(item.ItemName);
-        if (!_items.ContainsKey(item))
+        if (_cartCount[item] > 0)
         {
-            _items[item] = new List<ListItem>();
-        }
-        _items[item].Add(newItem);
-        newItem.InList = _shoppingList[item] >= _items[item].Count;
-        return newItem;
-    }
-
-    private void StyleListItem(ListItem listItem, Item item)
-    {
-        /*public bool InCart = false;
-        public bool Bought = false;
-        public bool InList = true;*/
-        if (listItem.Bought)
-        {
-            if (listItem.InList)
+            listItem.gameObject.SetActive(true);
+            if (_cartCount[item] <= _shoppingList[item])
             {
-                listItem.UIItemText.SetText(item.ItemName);
-                listItem.UIItemText.SetColor(Color.green);
+                listItem.SetText(_cartCount[item] + "/" +  stillNeeded + " " + item.ItemName);
             }
             else
             {
-                listItem.UIItemText.SetText(item.ItemName + "?");
-                listItem.UIItemText.SetColor(Color.red);
+                listItem.SetText("<color=red>" + _cartCount[item] + "</color>/" +  stillNeeded + " " + item.ItemName);
             }
         }
-
-        else if (listItem.InCart)
+        else 
         {
-            if (listItem.InList)
+            if (stillNeeded <= 0)
             {
-                listItem.UIItemText.SetText(item.ItemName);
-                listItem.UIItemText.SetColor(Color.gray);
+                listItem.gameObject.SetActive(false);
             }
-            else{
-                listItem.UIItemText.SetText(item.ItemName + "?");
-                listItem.UIItemText.SetColor(Color.red);
+            else
+            {
+                listItem.gameObject.SetActive(true);
+                listItem.SetText(_cartCount[item] + "/" +  stillNeeded + " " + item.ItemName);
             }
-        }
-        
-        else
-        {
-            listItem.UIItemText.SetText(item.ItemName);
-            listItem.UIItemText.SetColor(Color.black);
         }
     }
 
-    //searches the dictionary for an instance of the ListItem that is neither in the cart nor has been bought and updates it.
-    //if it cant find one a new one is instanced
+    private void InitiateUI()
+    {
+        foreach (Item item in _shoppingList.Keys)
+        {
+            Debug.Log(item.ItemName);
+            
+            _listItems[item] = Instantiate(listItemPrefab, transform).GetComponent<UIListItemWrapper>();
+            StyleUI(item);
+        }
+    }
+    
     public void OnPickUp(Item item)
     {
-        LogItems(_items);
-        if (_items.ContainsKey(item))
-        {
-            foreach (ListItem listItem in _items[item])
-            {
-                if (!listItem.InCart && !listItem.Bought)
-                {
-                    listItem.InCart = true;
-                    StyleListItem(listItem, item);
-                    return;
-                }
-            }
-        }
-        ListItem newListItem = AddItem(item);
-        newListItem.InCart = true;
-        StyleListItem(newListItem, item);
+        _cartCount[item]++;
+        StyleUI(item);
     }
 
-    //If buy searches for the first fitting ListItem in the cart and marks it as bought
-    //if not searches the last fitting ListItem in the cart and deletes it or marks it as not in the cart if it's on the shoppinglist
+
     public void OnDrop(Item item, bool buy)
     {
-        if (_items.ContainsKey(item) && _items[item].Count > 0)
+        _cartCount[item]--;
+        if (buy)
         {
-            ListItem bottomMostListItem = null;
- 
-            for (int i = _items[item].Count - 1; i >= 0; i--)
-            { 
-                ListItem listItem = _items[item][i]; 
-                if (listItem.InCart) 
-                {
-                    if (listItem.InList == buy) 
-                    {
-                        bottomMostListItem = listItem; 
-                        if(!buy) {break;}
-                    } 
-                    if (bottomMostListItem == null) bottomMostListItem = listItem;
-                }
-            }
-            
-            if (bottomMostListItem != null)
-            {
-                if(buy){
-                    bottomMostListItem.Bought = true;
-                    if (!bottomMostListItem.InList)
-                    {
-                        Globals.excessItems.Add(item);
-                    }
-                }
-
-                if (bottomMostListItem.InList || bottomMostListItem.Bought)
-                {
-                    bottomMostListItem.InCart = false;
-                    StyleListItem(bottomMostListItem, item);
-                }
-                else
-                {
-                    Destroy(bottomMostListItem.UIItemText.gameObject);
-                    _items[item].Remove(bottomMostListItem);
-                }
-            }
+            _boughtCount[item]++;
         }
-    }
-    
-    
-
-    public void OnDropAll(bool buy)
-    {
-        foreach (Item item in _items.Keys)
-        {
-            foreach (ListItem listItem in _items[item])
-            {
-                OnDrop(item, buy);
-            }
-        }
+        StyleUI(item);
     }
 }
