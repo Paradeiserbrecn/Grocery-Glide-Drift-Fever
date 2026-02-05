@@ -26,7 +26,7 @@ public class WheelBehaviour : MonoBehaviour
 
 	public bool IsGrounded()
 	{
-		return Physics.Raycast(transform.position, -transform.up, 0.14f, LayerMask.GetMask("Environment"));
+		return Physics.Raycast(transform.position, -transform.up, 0.16f, LayerMask.GetMask("Environment"));
 	}
 
 	/// <summary>
