@@ -8,7 +8,7 @@ public class UIListItemWrapper : MonoBehaviour
     private TMP_Text itemName;
     void Awake()
     {
-        itemName = GetComponent<TMP_Text>();
+        itemName = GetComponentInChildren<TMP_Text>();
     }
 
     public void SetColor(Color color)
@@ -16,9 +16,9 @@ public class UIListItemWrapper : MonoBehaviour
         itemName.color = color;
     }
 
-    public void SetText(string text)
+    public void SetText(string text, bool strikethrough)
     {
-        itemName.text = text;
+        if (strikethrough) itemName.text = "<s>" + text + "</s>";
+        else itemName.text = text;
     }
-
 }

@@ -8,49 +8,45 @@ using UnityEngine;
 public class CartInventory : MonoBehaviour
 {
     [SerializeField] private CartMovement cart;
-    [SerializeField] private CapsuleCollider itemRange;
-    
     private List<Item> inventory = new List<Item>();
-    private readonly List<ShelfScript> collidingShelves = new List<ShelfScript>();
+    [SerializeField] private CapsuleCollider itemRange;
 
-    private void Start()
-    {
-        EventManager.DropAll += OnDropAll;
-        EventManager.ItemDrop += OnDropItem;
-    }
+    [SerializeField] private ShoppingList shoppingList;
+
+    private List<ShelfScript> collidingShelves = new List<ShelfScript>();
 
     private bool AddItem(Item item)
     {
 
         if (cart.AddWeight(item.Weight))
         {
-            inventory.Add(item);
-            EventManager.InvokeItemPickup(item);
+            inventory.Add(item); 
+            shoppingList.PickUp(item); 
             return true;
-            
-            //TODO instance prefab in cart
-            //TODO change sound in audio
         }
         return false;
+        //TODO instance prefab in cart
+        //TODO change sound in audio
     }
 
-    public void OnDropItem(Item item, bool buy)
+    public void DropItem(Item item, bool buy)
     {
         inventory.Remove(item);
         cart.AddWeight(-item.Weight);
+        shoppingList.Drop(item,buy);
         
 
         //TODO get rid of prefab in cart
         //TODO change sound in audio
     }
 
-    public void OnDropAll(bool buy)
+    public void DropAll(bool buy)
     {
         if (!cart.DEBUG_canDropAll) return;
         
         while(inventory.Count > 0)
         {
-            EventManager.InvokeItemDrop(inventory[0], buy);
+            DropItem(inventory[0], buy);
         }
     }
 

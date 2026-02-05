@@ -8,6 +8,7 @@ public class WheelBehaviour : MonoBehaviour
 	private CartMovement _cartMovement;
 	[SerializeField] private ParticleSystem smoke, sparks;
 	[SerializeField] private TrailRenderer streaks;
+
 	private void Start()
 	{
 		_cartMovement = rb.GetComponent<CartMovement>();
@@ -15,18 +16,14 @@ public class WheelBehaviour : MonoBehaviour
 		sparks.Stop();
 		sparks.Clear();
 	}
+
 	private void FixedUpdate()
 	{
-		if (new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > 0)
+		if (new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > 0.02)
 		{
 			transform.LookAt(transform.position + rb.velocity);
 			transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
 		}
-	}
-
-	public bool IsGrounded()
-	{
-		return Physics.Raycast(transform.position, -transform.up, 0.14f, LayerMask.GetMask("Environment"));
 	}
 
 	/// <summary>
@@ -34,13 +31,14 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySmoke()
 	{
-		if (IsGrounded())
+		if (Physics.Raycast(transform.position, -transform.up, 0.15f, LayerMask.GetMask("Environment")))
 		{
 			smoke.Play();
 			streaks.emitting = true;
 		}
 		else
 		{
+			smoke.Stop();
 			streaks.emitting = false;
 		}
 	}
@@ -57,7 +55,7 @@ public class WheelBehaviour : MonoBehaviour
 	/// </summary>
 	public void PlaySpark()
 	{
-		if (IsGrounded())
+		if (Physics.Raycast(transform.position, -transform.up, 0.15f,  LayerMask.GetMask("Environment")))
 		{
 			sparks.Play();
 		}

@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
     [SerializeField] private GameObject shelfGroup;
     private HashSet<Item> _existingItems;
-    void Awake()
+    private ShoppingList _shoppingList;
+    void Start()
     {
         _existingItems = GatherItems();
+        /*foreach (var item in _existingItems)
+        {
+            Debug.Log(item);
+        }*/
     }
 
     private HashSet<Item> GatherItems()
@@ -28,15 +32,6 @@ public class Shop : MonoBehaviour
 
     public List<Item> getExistingItems()
     {
-        
         return new List<Item>(new List<Item>(_existingItems.ToArray()));
-    }
-
-    private void LogItems()
-    {
-        foreach (Item item in _existingItems)
-        {
-            Debug.Log(item.ToString());
-        }
     }
 }
