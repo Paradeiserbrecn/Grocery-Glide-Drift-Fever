@@ -85,7 +85,7 @@ public class ShoppingList : MonoBehaviour
         UIListItemWrapper listItemText = listItemGameObject.GetComponent<UIListItemWrapper>();
         ListItem newItem = new ListItem(listItemText);
         
-        listItemText.SetText(item.ItemName, false);
+        listItemText.SetText(item.ItemName);
         if (!_items.ContainsKey(item))
         {
             _items[item] = new List<ListItem>();
@@ -104,12 +104,12 @@ public class ShoppingList : MonoBehaviour
         {
             if (listItem.InList)
             {
-                listItem.UIItemText.SetText(item.ItemName, true);
+                listItem.UIItemText.SetText(item.ItemName);
                 listItem.UIItemText.SetColor(Color.green);
             }
             else
             {
-                listItem.UIItemText.SetText(item.ItemName + "?", true);
+                listItem.UIItemText.SetText(item.ItemName + "?");
                 listItem.UIItemText.SetColor(Color.red);
             }
         }
@@ -118,18 +118,18 @@ public class ShoppingList : MonoBehaviour
         {
             if (listItem.InList)
             {
-                listItem.UIItemText.SetText(item.ItemName, false);
+                listItem.UIItemText.SetText(item.ItemName);
                 listItem.UIItemText.SetColor(Color.gray);
             }
             else{
-                listItem.UIItemText.SetText(item.ItemName + "?", false);
+                listItem.UIItemText.SetText(item.ItemName + "?");
                 listItem.UIItemText.SetColor(Color.red);
             }
         }
         
         else
         {
-            listItem.UIItemText.SetText(item.ItemName, false);
+            listItem.UIItemText.SetText(item.ItemName);
             listItem.UIItemText.SetColor(Color.black);
         }
     }

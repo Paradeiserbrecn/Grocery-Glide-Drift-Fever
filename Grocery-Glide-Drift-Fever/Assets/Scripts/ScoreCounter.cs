@@ -83,7 +83,7 @@ public class ScoreCounter : MonoBehaviour
     {
         _targetPosition = _camera.ScreenToWorldPoint(new Vector3(_scoreSumPosition.x, _scoreSumPosition.y ,1f));
         
-        Debug.Log(_camera.transform.position +",  " + _targetPosition);
+        //Debug.Log(_camera.transform.position +",  " + _targetPosition);
         
         int idx = 0;
         //foreach (ScoreTextWrapper wrapper in _movingTextWrappers)

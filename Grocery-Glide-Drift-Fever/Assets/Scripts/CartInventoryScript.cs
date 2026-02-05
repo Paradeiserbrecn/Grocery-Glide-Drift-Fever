@@ -11,11 +11,12 @@ public class CartInventory : MonoBehaviour
     [SerializeField] private CapsuleCollider itemRange;
     
     private List<Item> inventory = new List<Item>();
-    private List<ShelfScript> collidingShelves = new List<ShelfScript>();
+    private readonly List<ShelfScript> collidingShelves = new List<ShelfScript>();
 
     private void Start()
     {
         EventManager.DropAll += OnDropAll;
+        EventManager.ItemDrop += OnDropItem;
     }
 
     private bool AddItem(Item item)
@@ -26,10 +27,11 @@ public class CartInventory : MonoBehaviour
             inventory.Add(item);
             EventManager.InvokeItemPickup(item);
             return true;
+            
+            //TODO instance prefab in cart
+            //TODO change sound in audio
         }
         return false;
-        //TODO instance prefab in cart
-        //TODO change sound in audio
     }
 
     public void OnDropItem(Item item, bool buy)
@@ -48,7 +50,7 @@ public class CartInventory : MonoBehaviour
         
         while(inventory.Count > 0)
         {
-            OnDropItem(inventory[0], false);
+            EventManager.InvokeItemDrop(inventory[0], buy);
         }
     }
 
