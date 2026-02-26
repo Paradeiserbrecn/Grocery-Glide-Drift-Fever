@@ -8,42 +8,42 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Rubber.001
-    second: {fileID: 2100000, guid: d9f3d3dd51a71a2468b3b4adde106b45, type: 2}
+    second: {fileID: 2100000, guid: 62bed1b3bc2288f4a9c72f722134fb46, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: light.001
-    second: {fileID: 2100000, guid: f06463fb604a01d4b9d72f91c78a4793, type: 2}
+    second: {fileID: 2100000, guid: 39083ff415218bf4dae3faeba16259a3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: outline
-    second: {fileID: 2100000, guid: 3da92f7ded5f54341a5321108caee92c, type: 2}
+    second: {fileID: 2100000, guid: bd1d4539c0d900f468da379338e48b19, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: phone body.001
-    second: {fileID: 2100000, guid: 6d19f89018b83e54693303fcd07d610f, type: 2}
+    second: {fileID: 2100000, guid: 2daf0d3b3f6e5554982080cbd71fda06, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: phone faceplate.001
-    second: {fileID: 2100000, guid: 9246e7d37d1fbb74c902703d7131eb06, type: 2}
+    second: {fileID: 2100000, guid: 58ea754bbcc3d354597522d46ff5e1af, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: phone screen.001
-    second: {fileID: 2100000, guid: 7ee522e629b21f14b9347290dd87e222, type: 2}
+    second: {fileID: 2100000, guid: 06099a14db7ab6940b38e96b07963bfb, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: pone buttons.001
-    second: {fileID: 2100000, guid: a65db9303b04dc8459ba2fe7d7b1ea87, type: 2}
+    second: {fileID: 2100000, guid: e0951d6e5f9f38d4eb5ffee3f5fa6f80, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: white
-    second: {fileID: 2100000, guid: 5e8a66c709c8d0e48a92e9dd27985afe, type: 2}
+    second: {fileID: 2100000, guid: f9feb812423a3b64a9834027c9552bb2, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -71,7 +71,65 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Armature|Idle
+      takeName: Armature|Idle
+      internalID: -8945691123924629249
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Talk
+      takeName: Armature|Talk
+      internalID: -123400888147246483
+      firstFrame: 0
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
