@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VectorGraphics;
 using UnityEngine;
 
@@ -7,4 +8,5 @@ public class LevelData : ScriptableObject
     public string levelName;
     public Scene Scene;
     public Sprite previewImage;
+    public List<string> dialog;
 }

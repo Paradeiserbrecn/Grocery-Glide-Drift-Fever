@@ -9,14 +9,16 @@ public class PhoneDialog : MonoBehaviour
     [SerializeField] private TMP_Text text;
     [SerializeField] private Animator phoneAnimator;
     [SerializeField] private double secPerChar;
-    private TextAsset jsonFile;
     
     private double time;
     private int charCount = 0;
+    private int dialogNr = 0;
+    private LevelData levelData;
+    private bool fulltextVisible = false;
 
-    private void Start()
+    public void StartDialog(LevelData data)
     {
-        
+        levelData = data;
     }
 
 
@@ -27,6 +29,10 @@ public class PhoneDialog : MonoBehaviour
         {
             time = 0;
             text.maxVisibleCharacters++;
+            if (text.maxVisibleCharacters >= charCount)
+            {
+                
+            }
         }
     }
 
@@ -34,6 +40,13 @@ public class PhoneDialog : MonoBehaviour
     {
         phoneAnimator.SetTrigger(0); //0 == Talk
         text.maxVisibleCharacters = 0;
-        text.SetText();
+        dialogNr++;
+        if (dialogNr >= levelData.dialog.Count)
+        {
+            //close dialog
+            //event dialog done
+        }
+        text.SetText(levelData.dialog[dialogNr]);
+        charCount = levelData.dialog[dialogNr].Length;
     }
 }
