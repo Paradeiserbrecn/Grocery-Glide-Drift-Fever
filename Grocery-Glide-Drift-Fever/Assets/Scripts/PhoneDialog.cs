@@ -24,14 +24,29 @@ public class PhoneDialog : MonoBehaviour
 
     void Update()
     {
-        time += Time.deltaTime;
-        if (time > secPerChar)
-        {
-            time = 0;
-            text.maxVisibleCharacters++;
-            if (text.maxVisibleCharacters >= charCount)
+        if(!fulltextVisible){
+            time += Time.deltaTime;
+            if (time > secPerChar)
             {
-                
+                time = 0;
+                text.maxVisibleCharacters++;
+                if (text.maxVisibleCharacters >= charCount)
+                {
+                    fulltextVisible = true;
+                    //text is fully visible
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (fulltextVisible)
+            {
+                AdvanceText();
+            }
+            else
+            {
+                text.maxVisibleCharacters = charCount;
             }
         }
     }
