@@ -10,5 +10,4 @@ public static class Globals
     public static List<Item> excessItems = new List<Item>();
     public static int DriftScore, AirtimeScore = 0;
     
-    public static List<LevelData> levelList = new List<LevelData>();
 }

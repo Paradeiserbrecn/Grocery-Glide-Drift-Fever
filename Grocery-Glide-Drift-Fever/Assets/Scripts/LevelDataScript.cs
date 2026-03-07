@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Unity.VectorGraphics;
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewLevelData", menuName = "Levels/Level Data")]
 public class LevelData : ScriptableObject
 {
     public string levelName;
-    public Scene Scene;
+    public String ScenePath;
     public Sprite previewImage;
     public List<string> dialog;
 }
