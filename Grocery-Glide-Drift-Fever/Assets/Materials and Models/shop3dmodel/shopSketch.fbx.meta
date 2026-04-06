@@ -3,7 +3,87 @@ guid: fc41c24a73aa462429424d589d63feb0
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 1a3b3f909b7f50e4e9f056dbabfbe93d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal
+    second: {fileID: 2100000, guid: d7532a4e512c4a346b35505caea57253, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Reigster
+    second: {fileID: 2100000, guid: 95e9d63721da6e543990b5f7a8a6b6cc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rubber
+    second: {fileID: 2100000, guid: 50cbe1a6122a168458dde9a15621e4a9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Simple tiles
+    second: {fileID: 2100000, guid: a049d34b624c67b459dd57a02dd81140, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tomato soup
+    second: {fileID: 2100000, guid: 857cc6586d83083409bbf4385dfdb1a1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bubble gum
+    second: {fileID: 2100000, guid: cd113c1d0b57fa74b9ad3b1393a71303, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bubble gum.002
+    second: {fileID: 2100000, guid: 29a28250194494d4a8a052962e76628d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glasses
+    second: {fileID: 2100000, guid: 8ec23050580623f49bfd74ed57ad72fa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lips
+    second: {fileID: 2100000, guid: 16d7fb30f6eee9e489d0eb84cd102390, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lips.002
+    second: {fileID: 2100000, guid: 5725304ec503c884fb56dfb1f8bcd53b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phone body
+    second: {fileID: 2100000, guid: ffa1dba1d2ca8fc45b256713c5f21c37, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pineapple
+    second: {fileID: 2100000, guid: 53dbd3e7c4adca74f8e531c9cba1d77d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pizza
+    second: {fileID: 2100000, guid: 297ed5213a34817439b66e21bf19ec8a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: register
+    second: {fileID: 2100000, guid: 0e174b28b44bab543a7d5d2727aef63f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shelf sign
+    second: {fileID: 2100000, guid: 8ff68681c64eb8c4d83769ae8c362d3c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
