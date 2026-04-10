@@ -111,6 +111,8 @@ public class CartMovement : MonoBehaviour
             {
                 _scoreCounter.StopCounter((int)(_airtime * airtimeMultiplier), ScoreCounter.ScoreType.AirTime);
             }
+
+            Globals.AirtimeScore += (float)(_airtime * airtimeMultiplier);
             _airtime = 0;
         }
     }
@@ -362,6 +364,9 @@ public class CartMovement : MonoBehaviour
             }
 
             if(IsGrounded) _scoreCounter.StopCounter((int)_driftScore, ScoreCounter.ScoreType.Drift);
+
+            Globals.DriftScore += _driftScore;
+            
             _driftTime = 0;
             _driftScore = 0;
             BoostReady = false;
