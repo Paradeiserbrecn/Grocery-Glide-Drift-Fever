@@ -9,7 +9,7 @@ public class LevelSelect : MonoBehaviour
 {
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private RectTransform content;
-    [SerializeField] private LevelListScript levelList;
+    [SerializeField] private List<LevelData> levelList;
     [SerializeField] private GameObject buttonPrefab;
     
     private List<Button> buttons = new List<Button>();
@@ -22,7 +22,7 @@ public class LevelSelect : MonoBehaviour
 
     private void ShowAllLevels()
     {
-        foreach (LevelData level in levelList.levels)
+        foreach (LevelData level in levelList)
         {
             Button newButton = Instantiate(buttonPrefab, content).GetComponent<Button>();
             newButton.onClick.AddListener(() => LoadLevel(level));
