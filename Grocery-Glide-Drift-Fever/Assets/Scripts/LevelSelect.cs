@@ -25,7 +25,11 @@ public class LevelSelect : MonoBehaviour
         foreach (LevelData level in levelList)
         {
             Button newButton = Instantiate(buttonPrefab, content).GetComponent<Button>();
-            newButton.onClick.AddListener(() => LoadLevel(level));
+            newButton.onClick.AddListener(() =>
+            {
+                LoadLevel(level);
+                Globals.currentLevel = level;
+            });
         }
     }
 
@@ -38,7 +42,7 @@ public class LevelSelect : MonoBehaviour
 
     IEnumerator LoadYourAsyncScene(LevelData level)
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(level.ScenePath, LoadSceneMode.Single);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(level.scenePath, LoadSceneMode.Single);
         
         while (!asyncLoad.isDone)
         {

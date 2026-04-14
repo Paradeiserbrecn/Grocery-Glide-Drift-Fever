@@ -52,6 +52,11 @@ public class CartInventory : MonoBehaviour
         {
             EventManager.InvokeItemDrop(inventory[0], buy);
         }
+
+        if (buy)
+        {
+            EventManager.InvokeCheckIfFinished();
+        }
     }
 
     public void PrintInv()

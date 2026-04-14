@@ -27,6 +27,7 @@ public class ShoppingList : MonoBehaviour
         InitiateUI();
         EventManager.ItemPickup += OnPickUp;
         EventManager.ItemDrop += OnDrop;
+        EventManager.CheckIfFinished += OnFinishCheck;
     }
 
     private void LogDict<T>(Dictionary<Item, T> dict)
@@ -129,5 +130,22 @@ public class ShoppingList : MonoBehaviour
             _boughtCount[item]++;
         }
         StyleUI(item);
+    }
+
+    public void OnFinishCheck()
+    {
+        bool done = true;
+        int excess = 0;
+        foreach (Item item in _shoppingList.Keys)
+        {
+            done = done && _boughtCount[item] >= _shoppingList[item];
+            excess += _boughtCount[item] - _shoppingList[item];
+        }
+
+        if (done)
+        {
+            Globals.excessItems = excess;
+            EventManager.InvokeLevelFinished();
+        }
     }
 }

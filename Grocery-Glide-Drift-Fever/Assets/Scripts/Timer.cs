@@ -35,6 +35,7 @@ public class Timer : MonoBehaviour
         ts = stopwatch.Elapsed;
         formatedTimeText = String.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
         timerTMP.SetText(formatedTimeText);
+        Globals.raceTime = ts;
     }
 
     private void OnLevelFinished()
