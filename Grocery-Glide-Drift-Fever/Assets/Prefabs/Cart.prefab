@@ -128,6 +128,9 @@ MonoBehaviour:
   minDrift: 3
   weightFactor: 1
   minBoost: 70
+  minScoreCount: 0
+  minAirtime: 0
+  airtimeMultiplier: 100
   maxBoostStrength: 1
   fixedTippingThreshold: 6
   maxTippingThresholdBoost: 3
@@ -174,7 +177,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -225,7 +228,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cart: {fileID: 3981849206203248135}
   itemRange: {fileID: 7008426645689174205}
-  shoppingList: {fileID: 0}
 --- !u!136 &7008426645689174205
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -239,7 +241,7 @@ CapsuleCollider:
     m_Bits: 128
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 127
+    m_Bits: 383
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0

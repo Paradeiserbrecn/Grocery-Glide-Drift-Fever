@@ -22,6 +22,8 @@ public class Newspaper : MonoBehaviour
 
     private void OnLevelFinished()
     {
+        Debug.Log((Globals.AirtimeScore+Globals.DriftScore) + "/" + Globals.raceTime.TotalSeconds + "/" + Globals.excessItems);
+        
         newspaper.gameObject.SetActive(true);
         EnterAnimation();
         List<Grade> grades = LookUpGrades();
@@ -32,20 +34,32 @@ public class Newspaper : MonoBehaviour
     private List<Grade> LookUpGrades()
     {
         List<Grade> grades = new List<Grade>();
-        grades.Add(AssignGrade(Globals.currentLevel.styleGrades, (Globals.AirtimeScore + Globals.DriftScore)));
-        grades.Add(AssignGrade(Globals.currentLevel.timeGrades, Globals.raceTime.Milliseconds));
-        grades.Add(AssignGrade(Globals.currentLevel.itemGrades, Globals.excessItems));
+        grades.Add(AssignGrade(Globals.currentLevel.styleGrades, (Globals.AirtimeScore + Globals.DriftScore), false));
+        grades.Add(AssignGrade(Globals.currentLevel.timeGrades, (float)Globals.raceTime.TotalSeconds, true));
+        grades.Add(AssignGrade(Globals.currentLevel.itemGrades, Globals.excessItems, true));
         return grades;
     }
 
-    private Grade AssignGrade(List<float> gradeValues, float value)
+    private Grade AssignGrade(List<float> gradeValues, float value, bool smallerIsBetter)
     {
-        int idx = 0;
-        for (int i = 0; i < gradeValues.Count; i++)
+        if (smallerIsBetter)
         {
-            if(gradeValues[i] >= value)
+            for (int i = 0; i < gradeValues.Count; i++)
             {
-                return (Grade)idx;
+                if(value <= gradeValues[i])
+                {
+                    return (Grade)i;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < gradeValues.Count; i++)
+            {
+                if(value >= gradeValues[i])
+                {
+                    return (Grade)i;
+                }
             }
         }
         return Grade.D;

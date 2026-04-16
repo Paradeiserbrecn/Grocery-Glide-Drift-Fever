@@ -19,10 +19,10 @@ MonoBehaviour:
   - This is the first sentence
   - this is the second!
   styleGrades:
-  - 5000
-  - 4000
-  - 3000
-  - 2000
+  - 1000
+  - 750
+  - 500
+  - 200
   timeGrades:
   - 20
   - 25

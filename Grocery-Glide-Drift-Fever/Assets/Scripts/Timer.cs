@@ -19,6 +19,8 @@ public class Timer : MonoBehaviour
     private void Start()
     {
         timerTMP = GetComponent<TMP_Text>();
+        
+        EventManager.LevelFinished += OnLevelFinished;
     }
 
     void Update()
@@ -41,6 +43,5 @@ public class Timer : MonoBehaviour
     private void OnLevelFinished()
     {
         stopwatch.Stop();
-        Globals.raceTime = stopwatch.Elapsed;
     }
 }
