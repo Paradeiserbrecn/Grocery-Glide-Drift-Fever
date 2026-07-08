@@ -10,6 +10,7 @@ public class Newspaper : MonoBehaviour
 {
     [SerializeField] private TMP_Text pollResult, fillText;
     [SerializeField] private GameObject newspaper;
+    [SerializeField] private Animator animator;
     
     [SerializeField] private List<string> styleTexts, timeTexts, itemsTexts;
     
@@ -25,7 +26,7 @@ public class Newspaper : MonoBehaviour
         Debug.Log((Globals.AirtimeScore+Globals.DriftScore) + "/" + Globals.raceTime.TotalSeconds + "/" + Globals.excessItems);
         
         newspaper.gameObject.SetActive(true);
-        EnterAnimation();
+        animator.SetTrigger("Show");
         List<Grade> grades = LookUpGrades();
         pollResult.text = PollResultText(grades);
         fillText.text = FillText(grades);
@@ -82,8 +83,4 @@ public class Newspaper : MonoBehaviour
                "The store will likely go bankrupt after this tragic incident.";
     }
 
-    private void EnterAnimation()
-    {
-        
-    }
 }
